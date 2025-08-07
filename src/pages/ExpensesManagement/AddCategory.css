@@ -1,0 +1,33 @@
+/* Backgrounds */
+.bg-success-soft {
+  background-color: #28c76f !important; /* green shade */
+}
+
+.bg-danger-soft {
+  background-color: #ea5455 !important; /* coral red */
+}
+
+/* Toast progress bar */
+.toast-progress-bar {
+  height: 5px;
+  width: 100%;
+  animation: shrink 3s linear forwards;
+  border-radius: 0 0 0.375rem 0.375rem;
+}
+
+.toast-progress-bar.success {
+  background-color: #1e9e63; /* dark green */
+}
+
+.toast-progress-bar.error {
+  background-color: #c82333; /* dark red */
+}
+
+@keyframes shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

@@ -1,0 +1,70 @@
+/* Toast container (top-right corner) */
+.custom-toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1055;
+}
+
+/* Toast itself */
+.custom-toast {
+  background-color: #fff;
+  border-left: 5px solid;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+  min-width: 300px;
+  max-width: 400px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: fadeInRight 0.5s ease;
+  position: relative;
+}
+
+/* Success and error color bar */
+.custom-toast.success {
+  border-color: #28a745;
+}
+
+.custom-toast.error {
+  border-color: #dc3545;
+}
+
+/* Toast message */
+.custom-toast-message {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Progress bar */
+.custom-toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  animation: shrinkProgress 3s linear forwards;
+}
+
+/* Animate.css fadeInRight (optional override if Animate.css is not imported) */
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Progress shrink animation */
+@keyframes shrinkProgress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

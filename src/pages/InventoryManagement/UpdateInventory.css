@@ -1,0 +1,12 @@
+@keyframes shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.shrink-bar-animate {
+  animation: shrink 3s linear forwards;
+}

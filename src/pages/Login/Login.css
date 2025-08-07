@@ -1,0 +1,111 @@
+.card {
+  border: none;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.card h2 {
+  font-weight: 600;
+  color: #333;
+}
+
+.card p {
+  color: #6c757d;
+}
+
+.card input.form-control-lg {
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 1.05rem;
+}
+
+.card .btn-primary {
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.card .btn-lg {
+  font-size: 1.1rem;
+  padding: 0.65rem;
+}
+
+.card .btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+a.text-decoration-none {
+  color: #0d6efd;
+}
+
+a.text-decoration-none:hover {
+  text-decoration: underline;
+}
+
+.toast {
+  animation: fadeInSlide 0.5s ease-in-out;
+  min-width: 250px;
+}
+
+@keyframes fadeInSlide {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+.toast-progress-bar {
+  height: 4px;
+  animation: toastProgress 3s linear forwards;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+@keyframes toastProgress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+
+.fade-in {
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.password-toggle {
+  position: absolute;
+  top: 38px;
+  right: 10px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.2rem;
+}
+.login-card {
+  padding: 40px;
+}
+
+@media (max-width: 576px) {
+  .login-card {
+    padding: 30px;
+  }
+}

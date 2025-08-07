@@ -1,0 +1,39 @@
+.toast-progress {
+  height: 4px;
+  width: 100%;
+  animation: shrinkProgress 3s linear forwards;
+}
+
+@keyframes shrinkProgress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+
+.custom-expense-table {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.custom-expense-table td,
+.custom-expense-table th {
+  vertical-align: middle;
+  font-size: 0.95rem;
+}
+
+.custom-expense-table thead th {
+  background-color: #007bff;
+  color: white;
+}
+
+@media (max-width: 576px) {
+  .custom-expense-table th,
+  .custom-expense-table td {
+    font-size: 0.85rem;
+  }
+}

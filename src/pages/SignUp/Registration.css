@@ -1,0 +1,70 @@
+.registration-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f6fa;
+  padding: 30px;
+}
+
+.registration-card {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 36px;
+  right: 10px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.2rem;
+}
+
+.toast {
+  animation: fadeInSlide 0.5s ease-in-out;
+  min-width: 250px;
+}
+
+@keyframes fadeInSlide {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+.toast-progress-bar {
+  height: 4px;
+  animation: toastProgress 3s linear forwards;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+@keyframes toastProgress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+@media (max-width: 768px) {
+  .registration-card {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 576px) {
+  .registration-card {
+    padding: 20px;
+  }
+}
