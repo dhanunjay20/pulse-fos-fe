@@ -1,12 +1,18 @@
-@keyframes shrinkProgress {
-  from {
-    width: 100%;
-  }
-  to {
-    width: 0%;
-  }
-}
+/* Ensure uniform input/select heights across browsers */
+        .form-control, .form-select {
+          height: 48px !important;
+        }
 
-.toast-body {
-  font-weight: 500;
-}
+
+        .toast-progress { height: 4px; overflow: hidden; border-radius: 4px; margin-top: 6px; }
+        .toast .progress-bar { background: rgba(255,255,255,0.95); height: 4px; }
+        
+        @keyframes shrinkProgress {
+          from { width: 100%; }
+          to { width: 0%; }
+        }
+
+        @media (max-width: 575.98px) {
+          .form-control, .form-select { height: 44px !important; }
+          .btn { height: 44px !important; font-size: 0.95rem; padding-left: 1rem; padding-right: 1rem; }
+        }

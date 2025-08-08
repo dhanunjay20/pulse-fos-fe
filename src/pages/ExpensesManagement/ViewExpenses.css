@@ -1,39 +1,28 @@
-.toast-progress {
-  height: 4px;
-  width: 100%;
-  animation: shrinkProgress 3s linear forwards;
-}
+.form-control, .form-select {
+          height: 48px !important;
+        }
 
-@keyframes shrinkProgress {
-  from {
-    width: 100%;
-  }
-  to {
-    width: 0%;
-  }
-}
+        /* Center all th/td (defensive) */
+        table th, table td {
+          text-align: center !important;
+          vertical-align: middle !important;
+        }
 
+        /* Toast progress shrink */
+        .toast-progress {
+          height: 4px;
+          width: 100%;
+          animation: shrink 3s linear forwards;
+        }
+        .toast-progress.success { background-color: #198754; }
+        .toast-progress.error { background-color: #dc3545; }
 
-.custom-expense-table {
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+        @keyframes shrink {
+          from { width: 100%; }
+          to { width: 0%; }
+        }
 
-.custom-expense-table td,
-.custom-expense-table th {
-  vertical-align: middle;
-  font-size: 0.95rem;
-}
-
-.custom-expense-table thead th {
-  background-color: #007bff;
-  color: white;
-}
-
-@media (max-width: 576px) {
-  .custom-expense-table th,
-  .custom-expense-table td {
-    font-size: 0.85rem;
-  }
-}
+        /* Optional: small tweak for action btn sizes on small screens */
+        @media (max-width: 575.98px) {
+          .btn-sm { font-size: 0.78rem; padding: 0.25rem 0.4rem; }
+        }
