@@ -27,7 +27,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/login",
+        "https://pulse-766719709317.asia-south1.run.app/login",
         { username, password }
       );
 
@@ -55,7 +55,7 @@ function Login() {
             navigate("/dashboard/manager");
             break;
           case "OWNER":
-            navigate("/dashboard/owner");
+            navigate("/dashboard/home");
             break;
           default:
             navigate("/login");
