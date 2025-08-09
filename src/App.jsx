@@ -17,6 +17,9 @@ import ViewCustomers from "./pages/CustomersManagement/ViewCustomers";
 import AddNewCustomer from "./pages/CustomersManagement/AddNewCustomer";
 import DashboardLayout from "./pages/DashboardLayout/DashboardLayout";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import ManagerDashboard from "./pages/Dashboards/ManagerDashboard";
+import OwnerDashboard from "./pages/Dashboards/OwnerDashboard";
+import EmployeeDashboard from "./pages/Dashboards/EmployeeDashboard";
 
 const App = () => {
   return (
@@ -35,7 +38,12 @@ const App = () => {
           </ProtectedRoute>
         }
       >
-        {/* All dashboard child routes share the same layout + navbar */}
+        {/* Role-specific dashboards */}
+        <Route path="employee" element={<EmployeeDashboard />} />
+        <Route path="manager" element={<ManagerDashboard />} />
+        <Route path="owner" element={<OwnerDashboard />} />
+
+        {/* Common dashboard pages */}
         <Route path="home" element={<DashboardHome />} />
         <Route path="salescollections" element={<SalesCollections />} />
         <Route path="inventory/view" element={<ViewInventory />} />
@@ -52,7 +60,7 @@ const App = () => {
         <Route path="customers/add" element={<AddNewCustomer />} />
       </Route>
 
-      {/* Catch-all route redirects to login */}
+      {/* Catch-all route */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
