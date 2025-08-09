@@ -137,7 +137,7 @@ const UpdateInventory = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4" style={{ width: '90%', maxWidth: '1440px' }}>
       <h2 className="mb-4">Update Inventory</h2>
 
       {toast.show && (
@@ -160,7 +160,7 @@ const UpdateInventory = () => {
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label>Select Product</label>
-          <select className="form-select" name="productId" value={formData.productId} onChange={handleProductSelect}>
+          <select className="form-select form-control-lg" name="productId" value={formData.productId} onChange={handleProductSelect}>
             <option value="">-- Select Product --</option>
             {products.map((p) => (
               <option key={p.productId} value={p.productId}>{p.productName}</option>
@@ -170,7 +170,7 @@ const UpdateInventory = () => {
 
         <div className="mb-3">
           <label>Select Employee</label>
-          <select className="form-select" name="employeeId" value={formData.employeeId} onChange={handleChange}>
+          <select className="form-select form-control-lg" name="employeeId" value={formData.employeeId} onChange={handleChange}>
             <option value="">-- Select Employee --</option>
             {employees.map((e) => (
               <option key={e.employeeId} value={e.employeeId}>{e.name} ({e.employeeId})</option>
@@ -181,22 +181,22 @@ const UpdateInventory = () => {
         <div className="row mb-3">
           <div className="col-md-6">
             <label>Current Level ({formData.metric})</label>
-            <input type="number" className="form-control" value={formData.currentLevel} readOnly />
+            <input type="number" className="form-control form-control-lg readonly-input" value={formData.currentLevel} readOnly />
           </div>
           <div className="col-md-6">
             <label>Tank Capacity ({formData.metric})</label>
-            <input type="number" className="form-control" value={formData.tankCapacity} readOnly />
+            <input type="number" className="form-control form-control-lg readonly-input" value={formData.tankCapacity} readOnly />
           </div>
         </div>
 
         <div className="row mb-4">
           <div className="col-md-6">
             <label>New Quantity ({formData.metric})</label>
-            <input type="number" className="form-control" name="newQty" value={formData.newQty} onChange={handleChange} required min="0" step="0.01" />
+            <input type="number" className="form-control form-control-lg" name="newQty" value={formData.newQty} onChange={handleChange} required min="0" step="0.01" />
           </div>
           <div className="col-md-6">
             <label>Refill Space ({formData.metric})</label>
-            <input type="number" className="form-control" value={formData.refillSpace} readOnly />
+            <input type="number" className="form-control form-control-lg readonly-input" value={formData.refillSpace} readOnly />
           </div>
         </div>
 

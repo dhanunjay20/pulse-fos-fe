@@ -2,6 +2,10 @@
 .fade-in-up {
   animation: fadeInUp 0.7s ease-in-out;
 }
+@keyframes progressShrink {
+    from { width: 100%; }
+    to { width: 0%; }
+  }
 
 @keyframes fadeInUp {
   0% {

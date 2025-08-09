@@ -30,16 +30,38 @@ function Login() {
         "https://pulse-766719709317.asia-south1.run.app/login",
         { username, password }
       );
+
+      // Save user data in localStorage
       localStorage.setItem("user", JSON.stringify(response.data));
       localStorage.setItem("isLoggedIn", "true");
+
+      // Success toast
       setToastMessage("✅ Login successful!");
       setToastType("success");
       setToastVisible(true);
 
+      // Extract employee role from response
+      const role = response.data?.employeeRole?.toUpperCase();
+      console.log(role)
+      // Navigate based on role after short delay
       setTimeout(() => {
         setToastVisible(false);
-        navigate("/dashboard/home");
-      }, 3000);
+
+        switch (role) {
+          case "EMPLOYEE":
+            navigate("/dashboard/employee");
+            break;
+          case "MANAGER":
+            navigate("/dashboard/manager");
+            break;
+          case "OWNER":
+            navigate("/dashboard/home");
+            break;
+          default:
+            navigate("/login");
+            break;
+        }
+      }, 2000);
     } catch (error) {
       setErrorMessage("❌ Login failed. Please check your username and password.");
       setToastMessage("Login failed. Invalid credentials.");
@@ -86,6 +108,13 @@ function Login() {
               className="password-toggle"
               onClick={() => setShowPassword((prev) => !prev)}
               title={showPassword ? "Hide password" : "Show password"}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "38px",
+                cursor: "pointer",
+                fontSize: "1.2rem"
+              }}
             >
               {showPassword ? "🙈" : "👁️"}
             </span>
@@ -102,7 +131,7 @@ function Login() {
 
           <div className="text-center mb-3">
             <span className="text-muted small">New here? </span>
-            <Link to='/signup' className="text-decoration-none small fw-semibold">
+            <Link to="/signup" className="text-decoration-none small fw-semibold">
               Create an account
             </Link>
           </div>
@@ -133,7 +162,7 @@ function Login() {
       </div>
 
       {/* Toast Notification */}
-      <div className={`position-fixed top-0 end-0 p-3`} style={{ zIndex: 9999 }}>
+      <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 9999 }}>
         <div
           className={`toast align-items-center text-bg-${
             toastType === "success" ? "success" : "danger"
