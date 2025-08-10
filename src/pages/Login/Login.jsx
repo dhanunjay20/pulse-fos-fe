@@ -60,7 +60,7 @@ function Login() {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="container d-flex justify-content-center align-items-center">
       <div
         className={`card shadow w-100 login-card ${animateCard ? "fade-in" : ""}`}
         style={{ maxWidth: "500px", padding: "40px" }}

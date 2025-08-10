@@ -15,7 +15,7 @@ const ViewInventory = () => {
         setLoading(false);
       })
       .catch((err) => {
-        setError("❌ Failed to load inventory: " + err.message);
+        setError("Failed to load inventory: " + err.message);
         showToast("Failed to load inventory", "error");
         setLoading(false);
       });

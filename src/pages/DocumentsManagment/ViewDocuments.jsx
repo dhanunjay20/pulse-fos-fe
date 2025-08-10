@@ -7,7 +7,6 @@ const ViewDocuments = () => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [toast, setToast] = useState({ show: false, message: "", type: "", ts: null });
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -37,29 +36,8 @@ const ViewDocuments = () => {
     }
   };
 
-  const showToast = (message, type) => {
-    setToast({ show: true, message, type, ts: Date.now() });
-    setTimeout(() => setToast({ show: false, message: "", type: "", ts: null }), 3000);
-  };
-
   return (
     <>
-      {/* Toast */}
-      {toast.show && (
-        <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 10555 }} key={toast.ts}>
-          <div
-            className={`toast align-items-center show animate__animated animate__fadeInRight ${
-              toast.type === "success" ? "bg-success text-white" : "bg-danger text-white"
-            }`}
-            role="alert"
-          >
-            <div className="d-flex justify-content-between align-items-center px-3 py-2">
-              <div>{toast.message}</div>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="inventory-bg">
         <div className="container inventory-container py-5">
           <div className="row justify-content-center">
