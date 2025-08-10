@@ -32,7 +32,7 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(response.data));
       localStorage.setItem("isLoggedIn", "true");
 
-      showToast("✅ Login successful!", "success");
+      showToast("Login successful!", "success");
 
       const role = response.data?.employeeRole?.toUpperCase();
       setTimeout(() => {
@@ -52,7 +52,7 @@ function Login() {
         }
       }, 2000);
     } catch (error) {
-      setErrorMessage("❌ Login failed. Please check your username and password.");
+      setErrorMessage("Login failed. Please check your username and password.");
       showToast("Login failed. Invalid credentials.", "error");
     } finally {
       setLoading(false);

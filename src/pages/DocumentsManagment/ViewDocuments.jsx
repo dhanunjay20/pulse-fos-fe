@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaFileAlt } from "react-icons/fa";
+import { showToast } from '../../components/ToastProvider';
 
 const ViewDocuments = () => {
   const [documents, setDocuments] = useState([]);
@@ -21,7 +22,6 @@ const ViewDocuments = () => {
       }
     };
     fetchDocuments();
-    // eslint-disable-next-line
   }, []);
 
   const handleViewDocument = async (fileUrl) => {
@@ -31,7 +31,7 @@ const ViewDocuments = () => {
         `https://pulse-766719709317.asia-south1.run.app/api/documents/${blobName}`
       );
       const signedUrl = response.data;
-      window.open(signedUrl, "_blank"); // Open in new tab
+      window.open(signedUrl, "_blank");
     } catch (error) {
       showToast("Failed to open document.", "error");
     }
@@ -135,7 +135,6 @@ const ViewDocuments = () => {
         {`
         .inventory-bg {
           min-height: 100vh;
-          padding-top: 70px;
         }
         .inventory-container {
           width: 98%;

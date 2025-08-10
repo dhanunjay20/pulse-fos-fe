@@ -228,7 +228,6 @@ const ViewProducts = () => {
         {`
         .inventory-bg {
           min-height: 100vh;
-          padding-top: 70px;
         }
         .inventory-container {
           width: 98%;

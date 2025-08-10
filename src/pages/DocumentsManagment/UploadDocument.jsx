@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import 'animate.css';
-import './UploadDocument.css';
+import { showToast } from '../../components/ToastProvider';
 
 const UploadDocument = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +14,6 @@ const UploadDocument = () => {
   });
 
   const [file, setFile] = useState(null);
-  const [toast, setToast] = useState({ show: false, message: '', type: '' });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -62,27 +60,22 @@ const UploadDocument = () => {
         }
       );
 
-      showToast('✅ Document uploaded successfully.', 'success');
+      showToast('Document uploaded successfully', 'success');
       resetForm();
     } catch (err) {
       console.error('Upload failed:', err);
-      showToast('❌ Failed to upload document. Please try again.', 'error');
+      showToast('Failed to upload document', 'error');
     }
   };
 
-  const showToast = (message, type) => {
-    setToast({ show: true, message, type });
-
-    setTimeout(() => {
-      setToast({ show: false, message: '', type: '' });
-    }, 3000);
-  };
-
   return (
-    <div className="container py-4">
-      <h2 className="mb-4 text-center">Upload New Document</h2>
+    <div
+      className="container py-4"
+      style={{ width: '96%', maxWidth: '100vw'}}
+    >
+      <h2 className="mb-4">Upload New Document</h2>
 
-      <form onSubmit={handleSubmit} className="bg-light p-4 rounded shadow-sm">
+      <form onSubmit={handleSubmit} className="p-4">
         <div className="row mb-3">
           <div className="col-md-6 mb-3">
             <label className="form-label">Document Type *</label>
@@ -184,34 +177,11 @@ const UploadDocument = () => {
         </div>
 
         <div className="d-grid">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary btn-lg w-100">
             Save Document
           </button>
         </div>
       </form>
-
-      {/* Toast Message */}
-      {toast.show && (
-        <div
-          className={`toast-container position-fixed top-0 end-0 p-3 animate__animated animate__fadeInRight`}
-          style={{ zIndex: 9999 }}
-        >
-          <div
-            className={`toast align-items-center text-white ${
-              toast.type === 'success' ? 'bg-success' : 'bg-danger'
-            } show`}
-          >
-            <div className="d-flex">
-              <div className="toast-body">{toast.message}</div>
-            </div>
-            <div
-              className={`toast-progress ${
-                toast.type === 'success' ? 'bg-light' : 'bg-warning'
-              }`}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

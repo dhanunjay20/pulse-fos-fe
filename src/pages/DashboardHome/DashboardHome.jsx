@@ -17,7 +17,7 @@ const cards = [
     icon: 'bi-box-seam',
     path: '/dashboard/inventory/view',
   },
-   {
+  {
     title: 'Manage Products',
     description: 'Keep track of products stock management and manage your products efficiently.',
     buttonText: 'Manage Products',
@@ -81,7 +81,10 @@ const DashboardHome = () => {
   const username = user?.username || "User";
 
   return (
-    <div className="container py-5">
+    <div
+      className="container py-5"
+      style={{ width: '96%', maxWidth: '100vw'}}
+    >
       <div className="text-center mb-5">
         <h1 className="fw-bold">Welcome back, {username}!</h1>
         <p className="text-muted fs-5">
