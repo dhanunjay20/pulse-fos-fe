@@ -20,49 +20,53 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import ManagerDashboard from "./pages/Dashboards/ManagerDashboard";
 import OwnerDashboard from "./pages/Dashboards/OwnerDashboard";
 import EmployeeDashboard from "./pages/Dashboards/EmployeeDashboard";
+import ToastProvider from "./Components/ToastProvider";
 
 const App = () => {
   return (
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Registration />} />
+    <>
+      <ToastProvider />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Registration />} />
 
-      {/* Protected Routes with Layout */}
-      <Route
-        path="/dashboard/*"
-        element={
-          <ProtectedRoute>
-            <DashboardLayout />
-          </ProtectedRoute>
-        }
-      >
-        {/* Role-specific dashboards */}
-        <Route path="employee" element={<EmployeeDashboard />} />
-        <Route path="manager" element={<ManagerDashboard />} />
-        <Route path="owner" element={<OwnerDashboard />} />
+        {/* Protected Routes with Layout */}
+        <Route
+          path="/dashboard/*"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          {/* Role-specific dashboards */}
+          <Route path="employee" element={<EmployeeDashboard />} />
+          <Route path="manager" element={<ManagerDashboard />} />
+          <Route path="owner" element={<OwnerDashboard />} />
 
-        {/* Common dashboard pages */}
-        <Route path="home" element={<DashboardHome />} />
-        <Route path="salescollections" element={<SalesCollections />} />
-        <Route path="inventory/view" element={<ViewInventory />} />
-        <Route path="inventory/update" element={<UpdateInventory />} />
-        <Route path="products/price" element={<UpdatePrice />} />
-        <Route path="products/view" element={<ViewProducts />} />
-        <Route path="products/add" element={<AddProduct />} />
-        <Route path="expenses/view" element={<ViewExpenses />} />
-        <Route path="expenses/add" element={<AddNewExpense />} />
-        <Route path="expenses/add-category" element={<AddCategory />} />
-        <Route path="documents/view" element={<ViewDocuments />} />
-        <Route path="documents/upload" element={<UploadDocument />} />
-        <Route path="customers/view" element={<ViewCustomers />} />
-        <Route path="customers/add" element={<AddNewCustomer />} />
-      </Route>
+          {/* Common dashboard pages */}
+          <Route path="home" element={<DashboardHome />} />
+          <Route path="salescollections" element={<SalesCollections />} />
+          <Route path="inventory/view" element={<ViewInventory />} />
+          <Route path="inventory/update" element={<UpdateInventory />} />
+          <Route path="products/price" element={<UpdatePrice />} />
+          <Route path="products/view" element={<ViewProducts />} />
+          <Route path="products/add" element={<AddProduct />} />
+          <Route path="expenses/view" element={<ViewExpenses />} />
+          <Route path="expenses/add" element={<AddNewExpense />} />
+          <Route path="expenses/add-category" element={<AddCategory />} />
+          <Route path="documents/view" element={<ViewDocuments />} />
+          <Route path="documents/upload" element={<UploadDocument />} />
+          <Route path="customers/view" element={<ViewCustomers />} />
+          <Route path="customers/add" element={<AddNewCustomer />} />
+        </Route>
 
-      {/* Catch-all route */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
-    </Routes>
+        {/* Catch-all route */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </>
   );
 };
 

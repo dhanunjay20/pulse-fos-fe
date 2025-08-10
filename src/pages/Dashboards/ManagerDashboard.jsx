@@ -1,8 +1,10 @@
-import React from 'react'
+import ViewExpenses from '../ExpensesManagement/ViewExpenses'
 
 const ManagerDashboard = () => {
   return (
-    <div>ManagerDashboard</div>
+    <div>
+      <ViewExpenses/>
+    </div>
   )
 }
 

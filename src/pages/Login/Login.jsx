@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { showToast } from "../../components/ToastProvider"; // Adjust path as needed
 import "./Login.css";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [toastVisible, setToastVisible] = useState(false);
-  const [toastType, setToastType] = useState("success");
-  const [toastMessage, setToastMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [animateCard, setAnimateCard] = useState(false);
@@ -31,22 +29,13 @@ function Login() {
         { username, password }
       );
 
-      // Save user data in localStorage
       localStorage.setItem("user", JSON.stringify(response.data));
       localStorage.setItem("isLoggedIn", "true");
 
-      // Success toast
-      setToastMessage("✅ Login successful!");
-      setToastType("success");
-      setToastVisible(true);
+      showToast("✅ Login successful!", "success");
 
-      // Extract employee role from response
       const role = response.data?.employeeRole?.toUpperCase();
-      console.log(role)
-      // Navigate based on role after short delay
       setTimeout(() => {
-        setToastVisible(false);
-
         switch (role) {
           case "EMPLOYEE":
             navigate("/dashboard/employee");
@@ -64,10 +53,7 @@ function Login() {
       }, 2000);
     } catch (error) {
       setErrorMessage("❌ Login failed. Please check your username and password.");
-      setToastMessage("Login failed. Invalid credentials.");
-      setToastType("error");
-      setToastVisible(true);
-      setTimeout(() => setToastVisible(false), 2000);
+      showToast("Login failed. Invalid credentials.", "error");
     } finally {
       setLoading(false);
     }
@@ -159,27 +145,6 @@ function Login() {
             <div className="text-danger text-center mt-2 small">{errorMessage}</div>
           )}
         </form>
-      </div>
-
-      {/* Toast Notification */}
-      <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 9999 }}>
-        <div
-          className={`toast align-items-center text-bg-${
-            toastType === "success" ? "success" : "danger"
-          } border-0 ${toastVisible ? "show" : "hide"}`}
-          role="alert"
-          aria-live="assertive"
-          aria-atomic="true"
-        >
-          <div className="d-flex">
-            <div className="toast-body">{toastMessage}</div>
-            <button
-              type="button"
-              className="btn-close btn-close-white me-2 m-auto"
-              onClick={() => setToastVisible(false)}
-            ></button>
-          </div>
-        </div>
       </div>
     </div>
   );

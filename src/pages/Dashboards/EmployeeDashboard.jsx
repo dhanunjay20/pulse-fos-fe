@@ -1,8 +1,10 @@
-import React from 'react'
+import SalesCollections from '../SalesAndCollections/SalesCollections'
 
 const EmployeeDashboard = () => {
   return (
-    <div>EmployeeDashboard</div>
+    <div>
+      <SalesCollections/>
+    </div>
   )
 }
 

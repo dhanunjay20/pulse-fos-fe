@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './UpdatePrice.css'
-import 'animate.css';
+import { showToast } from '../../components/ToastProvider'; // Adjust path if needed
+import './UpdatePrice.css';
 
 const UpdatePrice = () => {
   const [products, setProducts] = useState([]);
@@ -10,14 +10,6 @@ const UpdatePrice = () => {
   const [employeeId, setEmployeeId] = useState('');
   const [price, setPrice] = useState('');
   const [loading, setLoading] = useState(false);
-
-  // Toast state
-  const [toast, setToast] = useState({
-    visible: false,
-    message: '',
-    type: 'success', // 'success' or 'error'
-    progress: 100
-  });
 
   useEffect(() => {
     axios
@@ -44,21 +36,6 @@ const UpdatePrice = () => {
 
   const handleEmployeeSelect = (e) => {
     setEmployeeId(e.target.value);
-  };
-
-  const showToast = (message, type = 'success') => {
-    setToast({ visible: true, message, type, progress: 100 });
-
-    let progress = 100;
-    const interval = setInterval(() => {
-      progress -= 1;
-      if (progress <= 0) {
-        clearInterval(interval);
-        setToast((prev) => ({ ...prev, visible: false }));
-      } else {
-        setToast((prev) => ({ ...prev, progress }));
-      }
-    }, 30); // total duration = 3s
   };
 
   const handleSubmit = async (e) => {
@@ -93,34 +70,11 @@ const UpdatePrice = () => {
   };
 
   return (
-    <div className="container py-4">
+    <div
+      className="container py-4"
+      style={{ width: '90%', maxWidth: '1200px', margin: '0 auto' }}
+    >
       <h2 className="mb-4">Update Product Price</h2>
-
-      {/* Toast Message */}
-      {toast.visible && (
-        <div
-          className={`toast show position-fixed top-0 end-0 m-3 animate__animated animate__fadeInRight text-white ${
-            toast.type === 'success' ? 'bg-success' : 'bg-danger'
-          }`}
-          role="alert"
-          style={{ zIndex: 9999, minWidth: '250px' }}
-        >
-          <div className="toast-body d-flex justify-content-between align-items-center">
-            {toast.message}
-          </div>
-          <div className="progress" style={{ height: '3px' }}>
-            <div
-              className={`progress-bar ${toast.type === 'success' ? 'bg-light' : 'bg-white'}`}
-              role="progressbar"
-              style={{
-                width: `${toast.progress}%`,
-                transition: 'width 0.03s linear'
-              }}
-            ></div>
-          </div>
-        </div>
-      )}
-
       <form onSubmit={handleSubmit} className="border p-4 rounded shadow-sm bg-light">
         <div className="mb-3">
           <label className="form-label">Select Product</label>
