@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import logo from '../../assets/fos_logo.png'
+import logo from '../../assets/fos_logo.png';
 
 const Navbar = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -11,6 +11,18 @@ const Navbar = ({ onLogout }) => {
     if (empData) {
       setEmployee({ name: empData.name, id: empData.id });
     }
+
+    // Auto-close mobile menu when a link is clicked
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link, .dropdown-item');
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (navbarCollapse.classList.contains('show')) {
+          new window.bootstrap.Collapse(navbarCollapse).hide();
+        }
+      });
+    });
   }, []);
 
   const handleLogout = () => {
@@ -24,7 +36,10 @@ const Navbar = ({ onLogout }) => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+    <nav
+      className="navbar navbar-expand-lg navbar-dark bg-dark px-3 fixed-top shadow"
+      style={{ zIndex: 1030 }} // ensures it stays above content
+    >
       <NavLink className="navbar-brand d-flex align-items-center" to="/dashboard/home">
         <img src={logo} alt="Logo" height="40" className="me-2" />
         <span>FOS</span>
@@ -44,7 +59,6 @@ const Navbar = ({ onLogout }) => {
 
       <div className="collapse navbar-collapse" id="navbarNavDropdown">
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-
           {/* Inventory */}
           <li className="nav-item dropdown">
             <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'animate.css';
-import './UpdateInventory.css';
+import { showToast } from '../../components/ToastProvider';
 
 const UpdateInventory = () => {
   const [products, setProducts] = useState([]);
@@ -18,22 +17,16 @@ const UpdateInventory = () => {
     employeeId: ''
   });
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState({ show: false, message: '', type: 'success', timestamp: null });
 
   useEffect(() => {
     axios.get('https://pulse-766719709317.asia-south1.run.app/inventory/latest')
       .then((res) => setProducts(Array.isArray(res.data) ? res.data : []))
-      .catch(() => showToast('Failed to load products.', 'danger'));
+      .catch(() => showToast('Failed to load products.', 'error'));
 
     axios.get('https://pulse-766719709317.asia-south1.run.app/active')
       .then((res) => setEmployees(Array.isArray(res.data) ? res.data : []))
-      .catch(() => showToast('Failed to load employees.', 'danger'));
+      .catch(() => showToast('Failed to load employees.', 'error'));
   }, []);
-
-  const showToast = (message, type = 'success') => {
-    setToast({ show: true, message, type, timestamp: Date.now() });
-    setTimeout(() => setToast((prev) => ({ ...prev, show: false })), 3000);
-  };
 
   const resetForm = () => {
     setFormData({
@@ -102,14 +95,14 @@ const UpdateInventory = () => {
     const { productId, newQty, metric, employeeId, currentLevel, tankCapacity } = formData;
 
     if (!productId || !newQty || isNaN(Number(newQty)) || !employeeId) {
-      showToast('Please fill all required fields.', 'danger');
+      showToast('Please fill all required fields.', 'error');
       setLoading(false);
       return;
     }
 
     const total = parseFloat(currentLevel) + parseFloat(newQty);
     if (total - parseFloat(tankCapacity) > 0.01) {
-      showToast('Tank capacity exceeded.', 'danger');
+      showToast('Tank capacity exceeded.', 'error');
       setLoading(false);
       return;
     }
@@ -127,36 +120,21 @@ const UpdateInventory = () => {
           showToast('Entry added successfully!', 'success');
           resetForm();
         } else {
-          showToast('Failed to add entry.', 'danger');
+          showToast('Failed to add entry.', 'error');
         }
       })
       .catch((err) => {
-        showToast(err.response?.data || 'Failed to add entry.', 'danger');
+        showToast(err.response?.data || 'Failed to add entry.', 'error');
       })
       .finally(() => setLoading(false));
   };
 
   return (
-    <div className="container mt-4" style={{ width: '90%', maxWidth: '1440px' }}>
+    <div
+      className="container mt-4"
+      style={{ width: '96%', maxWidth: '100vw', paddingTop: '70px' }} // Added gap for navbar
+    >
       <h2 className="mb-4">Update Inventory</h2>
-
-      {toast.show && (
-        <div
-          key={toast.timestamp}
-          className="position-fixed top-0 end-0 p-3"
-          style={{ zIndex: 1050 }}
-        >
-          <div className={`toast show text-white animate__animated animate__fadeInRight bg-${toast.type}`}>
-            <div className="toast-body">
-              {toast.message}
-              <div className="progress mt-2" style={{ height: '4px' }}>
-                <div className="progress-bar shrink-bar-animate" />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label>Select Product</label>

@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./ViewCustomers.css";
-import "animate.css";
+import { showToast } from "../../components/ToastProvider";
 
 const ViewCustomers = () => {
   const [borrowers, setBorrowers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [toast, setToast] = useState({ show: false, message: "", type: "" });
 
   const [selectedBorrower, setSelectedBorrower] = useState(null);
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
@@ -27,6 +25,7 @@ const ViewCustomers = () => {
         setBorrowers(res.data);
       } catch (err) {
         setError("Failed to load borrowers");
+        showToast("Failed to load borrowers", "error");
       } finally {
         setLoading(false);
       }
@@ -85,9 +84,9 @@ const ViewCustomers = () => {
         )
       );
       setUpdateModalOpen(false);
-      setToast({ show: true, message: "Borrower updated successfully", type: "success" });
+      showToast("Borrower updated successfully", "success");
     } catch (err) {
-      setToast({ show: true, message: "Failed to update borrower", type: "error" });
+      showToast("Failed to update borrower", "error");
     }
   };
 
@@ -101,91 +100,98 @@ const ViewCustomers = () => {
       setTransactions(res.data);
       setDetailsModalOpen(true);
     } catch (err) {
-      alert("Failed to fetch transaction details");
+      showToast("Failed to fetch transaction details", "error");
     }
   };
 
-  useEffect(() => {
-    if (toast.show) {
-      const timer = setTimeout(() => {
-        setToast({ ...toast, show: false });
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [toast]);
-
   return (
-    <div className="container py-4">
-      <h2 className="mb-4">Borrowers</h2>
-
-      {toast.show && (
-        <div
-          className={`toast-container position-fixed top-0 end-0 p-3 animate__animated animate__fadeInRight`}
-          style={{ zIndex: 1055 }}
-        >
-          <div className={`toast align-items-center text-white bg-${toast.type === "success" ? "success" : "danger"} border-0 show`}>
-            <div className="d-flex">
-              <div className="toast-body">{toast.message}</div>
+    <>
+      <div className="inventory-bg">
+        <div className="container inventory-container py-5">
+          <div className="row justify-content-center">
+            <div className="col-12">
+              <div className="card inventory-card shadow-lg border-0">
+                <div className="card-header bg-gradient-primary text-white d-flex align-items-center justify-content-between">
+                  <h3 className="mb-0 fw-bold">
+                    <span role="img" aria-label="user">👥</span> All Borrowers
+                  </h3>
+                  <span className="badge bg-light text-primary fs-6">
+                    {borrowers.length} Customers
+                  </span>
+                </div>
+                <div className="card-body p-4">
+                  <div className="mb-3">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search by ID, Name, Vehicle, Phone"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  {loading ? (
+                    <div className="d-flex flex-column align-items-center py-5">
+                      <div className="spinner-border text-primary mb-3" role="status"></div>
+                      <span className="text-muted">Loading borrowers...</span>
+                    </div>
+                  ) : error ? (
+                    <div className="alert alert-danger text-center" role="alert">
+                      {error}
+                    </div>
+                  ) : (
+                    <div className="table-responsive">
+                      <table className="table table-hover align-middle inventory-table">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Vehicle</th>
+                            <th>Last Borrowed</th>
+                            <th>Due Amount (₹)</th>
+                            <th className="text-center">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filteredBorrowers.map((b) => (
+                            <tr key={b.id}>
+                              <td>{b.id}</td>
+                              <td>{b.customerName}</td>
+                              <td>{b.phone}</td>
+                              <td>{b.customerVehicle}</td>
+                              <td>{new Date(b.borrowDate).toLocaleDateString()}</td>
+                              <td>{b.amountBorrowed?.toLocaleString("en-IN")}</td>
+                              <td className="text-center">
+                                <div className="d-flex flex-column flex-sm-row gap-2 justify-content-center">
+                                  <button className="btn btn-sm btn-primary" onClick={() => handleUpdateClick(b)}>
+                                    Update
+                                  </button>
+                                  <button className="btn btn-sm btn-info" onClick={() => handleViewDetailsClick(b)}>
+                                    View Details
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+                <div className="card-footer text-end bg-white border-0">
+                  <small className="text-muted">
+                    Last refreshed: {new Date().toLocaleString()}
+                  </small>
+                </div>
+              </div>
             </div>
-            <div className="toast-progress bg-light"></div>
           </div>
         </div>
-      )}
-
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search by ID, Name, Vehicle, Phone"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
       </div>
 
-      {loading ? (
-        <div>Loading borrowers...</div>
-      ) : error ? (
-        <div className="text-danger">{error}</div>
-      ) : (
-        <div className="table-responsive">
-          <table className="table table-striped table-hover custom-expense-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Vehicle</th>
-                <th>Last Borrowed</th>
-                <th>Due Amount (₹)</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredBorrowers.map((b) => (
-                <tr key={b.id}>
-                  <td>{b.id}</td>
-                  <td>{b.customerName}</td>
-                  <td>{b.phone}</td>
-                  <td>{b.customerVehicle}</td>
-                  <td>{new Date(b.borrowDate).toLocaleDateString()}</td>
-                  <td>{b.amountBorrowed?.toLocaleString("en-IN")}</td>
-                  <td>
-                    <button className="btn btn-sm btn-primary me-2" onClick={() => handleUpdateClick(b)}>
-                      Update
-                    </button>
-                    <button className="btn btn-sm btn-info" onClick={() => handleViewDetailsClick(b)}>
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
+      {/* Update Modal */}
       {updateModalOpen && selectedBorrower && (
-        <div className="modal d-block" tabIndex="-1">
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
@@ -200,7 +206,7 @@ const ViewCustomers = () => {
                 <p>
                   <strong>{selectedBorrower.customerName}</strong> (ID: {selectedBorrower.id})
                 </p>
-                <p>Current Due Amount: ₹ {selectedBorrower.amountBorrowed}</p>
+                <p>Current Due Amount: ₹ {selectedBorrower.dueAmount}</p>
                 <input
                   type="number"
                   className="form-control mb-2"
@@ -241,8 +247,9 @@ const ViewCustomers = () => {
         </div>
       )}
 
+      {/* Details Modal */}
       {detailsModalOpen && (
-        <div className="modal d-block" tabIndex="-1">
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
               <div className="modal-header">
@@ -282,7 +289,41 @@ const ViewCustomers = () => {
           </div>
         </div>
       )}
-    </div>
+
+      <style>
+        {`
+        .inventory-bg {
+          min-height: 100vh;
+        }
+        .inventory-container {
+          width: 98%;
+          max-width: 100vw;
+        }
+        .inventory-card {
+          border-radius: 1.25rem;
+          overflow: hidden;
+        }
+        .bg-gradient-primary {
+          background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
+        }
+        .inventory-table thead th {
+          background: #f1f5f9;
+          color: #1e293b;
+          font-weight: 600;
+          border-bottom: 2px solid #e2e8f0;
+        }
+        .inventory-table tbody tr {
+          transition: background 0.2s;
+        }
+        .inventory-table tbody tr:hover {
+          background: #f0f6ff;
+        }
+        .inventory-table td, .inventory-table th {
+          vertical-align: middle;
+        }
+        `}
+      </style>
+    </>
   );
 };
 
