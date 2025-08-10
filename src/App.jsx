@@ -20,7 +20,7 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import ManagerDashboard from "./pages/Dashboards/ManagerDashboard";
 import OwnerDashboard from "./pages/Dashboards/OwnerDashboard";
 import EmployeeDashboard from "./pages/Dashboards/EmployeeDashboard";
-import ToastProvider from "./Components/ToastProvider";
+import ToastProvider from "./components/ToastProvider";
 
 const App = () => {
   return (
