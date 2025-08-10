@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'animate.css';
+import { showToast } from '../../components/ToastProvider';
+import { useNavigate } from 'react-router-dom';
 
 const AddNewExpense = () => {
   const [categories, setCategories] = useState([]);
@@ -14,7 +14,7 @@ const AddNewExpense = () => {
     amount: ''
   });
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState({ type: '', message: '', ts: null });
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategories();
@@ -27,7 +27,7 @@ const AddNewExpense = () => {
       const res = await axios.get('https://pulse-766719709317.asia-south1.run.app/categoryList');
       setCategories(res.data || []);
     } catch {
-      showToast('error', 'Failed to fetch categories.');
+      showToast('Failed to fetch categories.', 'error');
     }
   };
 
@@ -36,12 +36,16 @@ const AddNewExpense = () => {
       const res = await axios.get('https://pulse-766719709317.asia-south1.run.app/active');
       setEmployeeIds(res.data || []);
     } catch {
-      showToast('error', 'Failed to fetch employee list.');
+      showToast('Failed to fetch employee list.', 'error');
     }
   };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleCancel = () => {
+    navigate('/dashboard/expenses/view');
   };
 
   const handleSubmit = async (e) => {
@@ -58,7 +62,7 @@ const AddNewExpense = () => {
       };
 
       await axios.post('https://pulse-766719709317.asia-south1.run.app/expensesPost', payload);
-      showToast('success', 'Expense added successfully.');
+      showToast('Expense added successfully.', 'success');
 
       setForm({
         category: '',
@@ -68,61 +72,45 @@ const AddNewExpense = () => {
         amount: ''
       });
     } catch {
-      showToast('error', 'Failed to add expense. Please try again.');
+      showToast('Failed to add expense. Please try again.', 'error');
     } finally {
       setLoading(false);
     }
   };
 
-  const showToast = (type, message) => {
-    setToast({ type, message, ts: Date.now() });
-    setTimeout(() => setToast({ type: '', message: '', ts: null }), 3000);
-  };
-
   return (
-    <>
-      {/* Toast */}
-      {toast.message && (
-        <div
-          className="position-fixed top-0 end-0 p-3 animate__animated animate__fadeInRight"
-          style={{ zIndex: 10555 }}
-          key={toast.ts}
-        >
-          <div className={`toast show text-white ${toast.type === 'success' ? 'bg-success' : 'bg-danger'} rounded-3 shadow-sm`} role="alert" aria-live="assertive" aria-atomic="true">
-            <div className="toast-body fw-semibold">
-              {toast.message}
-              <div className="progress mt-2 toast-progress">
-                <div
-                  className="progress-bar"
-                  role="progressbar"
-                  style={{
-                    width: '100%',
-                    animation: 'shrinkProgress 3s linear forwards'
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div style={{ width: '90%', maxWidth: '1440px', margin: '0 auto' }} className="py-4">
+    <div className="inventory-bg" style={{ minHeight: '100vh' }}>
+      <div
+        className="container inventory-container py-5"
+        style={{ width: '98%', maxWidth: '100vw' }}
+      >
         <div className="row justify-content-center">
           <div className="col-12">
-            <div className="card shadow-sm rounded-4 border-0">
+            <div className="card inventory-card shadow-lg border-0">
+              <div className="card-header bg-gradient-primary text-white d-flex align-items-center justify-content-between">
+                <h3 className="mb-0 fw-bold">
+                  <span role="img" aria-label="expense">💸</span> Add New Expense
+                </h3>
+                <button
+                  className="btn btn-light btn-sm"
+                  onClick={handleCancel}
+                  disabled={loading}
+                >
+                  <i className="bi bi-arrow-left"></i> Back
+                </button>
+              </div>
               <div className="card-body p-4">
-                <h4 className="text-center mb-4 text-primary">Add New Expense</h4>
                 <form onSubmit={handleSubmit}>
                   <div className="row g-3">
                     <div className="col-md-6">
-                      <label className="form-label fw-medium">Category</label>
+                      <label className="form-label">Category *</label>
                       <select
                         name="category"
                         value={form.category}
                         onChange={handleChange}
-                        className="form-select  shadow-sm"
+                        className="form-select form-control-lg"
                         required
-                        style={{ height: '48px' }}
+                        style={{ height: '45px' }}
                       >
                         <option value="">Select</option>
                         {categories.map((cat, idx) => (
@@ -132,16 +120,15 @@ const AddNewExpense = () => {
                         ))}
                       </select>
                     </div>
-
                     <div className="col-md-6">
-                      <label className="form-label fw-medium">Employee</label>
+                      <label className="form-label">Employee *</label>
                       <select
                         name="employeeId"
                         value={form.employeeId}
                         onChange={handleChange}
-                        className="form-select shadow-sm"
+                        className="form-select form-control-lg"
                         required
-                        style={{ height: '48px' }}
+                        style={{ height: '45px' }}
                       >
                         <option value="">Select</option>
                         {employeeIds.map((emp) => {
@@ -156,61 +143,64 @@ const AddNewExpense = () => {
                         })}
                       </select>
                     </div>
-
                     <div className="col-md-6">
-                      <label className="form-label fw-medium">Date</label>
+                      <label className="form-label">Date *</label>
                       <input
                         type="date"
                         name="expenseDate"
                         value={form.expenseDate}
                         onChange={handleChange}
                         max={new Date().toISOString().split('T')[0]}
-                        className="form-control shadow-sm"
+                        className="form-control form-control-lg"
                         required
-                        style={{ height: '48px' }}
+                        style={{ height: '45px' }}
                       />
                     </div>
-
                     <div className="col-md-6">
-                      <label className="form-label fw-medium">Description</label>
+                      <label className="form-label">Description *</label>
                       <input
                         type="text"
                         name="description"
                         value={form.description}
                         onChange={handleChange}
-                        className="form-control shadow-sm"
+                        className="form-control form-control-lg"
                         required
                         placeholder="e.g., Travel, Office Rent"
-                        style={{ height: '48px' }}
+                        style={{ height: '45px' }}
                       />
                     </div>
-
                     <div className="col-md-6">
-                      <label className="form-label fw-medium">Amount (₹)</label>
+                      <label className="form-label">Amount (₹) *</label>
                       <input
                         type="number"
                         name="amount"
                         value={form.amount}
                         onChange={handleChange}
-                        className="form-control shadow-sm"
+                        className="form-control form-control-lg"
                         required
                         placeholder="e.g., 1200"
                         step="0.01"
                         min="0"
-                        style={{ height: '48px' }}
+                        style={{ height: '45px' }}
                       />
                     </div>
-
-                    <div className="col-12 text-end">
-                      <button
-                        type="submit"
-                        className="btn btn-success px-4 mt-3 d-flex align-items-center justify-content-center"
-                        disabled={loading}
-                        style={{ height: '48px' }}
-                      >
-                        {loading ? 'Adding...' : 'Add Expense'}
-                      </button>
-                    </div>
+                  </div>
+                  <div className="mt-4 d-flex justify-content-end gap-2">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={handleCancel}
+                      disabled={loading}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={loading}
+                    >
+                      {loading ? 'Adding...' : 'Add Expense'}
+                    </button>
                   </div>
                 </form>
               </div>
@@ -218,8 +208,25 @@ const AddNewExpense = () => {
           </div>
         </div>
       </div>
-
-    </>
+      <style>
+        {`
+        .inventory-bg {
+          min-height: 100vh;
+        }
+        .inventory-container {
+          width: 98%;
+          max-width: 100vw;
+        }
+        .inventory-card {
+          border-radius: 1.25rem;
+          overflow: hidden;
+        }
+        .bg-gradient-primary {
+          background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
+        }
+        `}
+      </style>
+    </div>
   );
 };
 

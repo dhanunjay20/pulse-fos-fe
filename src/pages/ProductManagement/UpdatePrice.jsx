@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { showToast } from '../../components/ToastProvider'; // Adjust path if needed
-import './UpdatePrice.css';
+import { showToast } from '../../components/ToastProvider';
+import { useNavigate } from 'react-router-dom';
+
+const inputStyle = { height: '48px', borderRadius: '8px' };
 
 const UpdatePrice = () => {
   const [products, setProducts] = useState([]);
@@ -10,6 +12,7 @@ const UpdatePrice = () => {
   const [employeeId, setEmployeeId] = useState('');
   const [price, setPrice] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -70,77 +73,125 @@ const UpdatePrice = () => {
   };
 
   return (
-    <div
-      className="container py-4"
-      style={{ width: '90%', maxWidth: '1200px', margin: '0 auto' }}
-    >
-      <h2 className="mb-4">Update Product Price</h2>
-      <form onSubmit={handleSubmit} className="border p-4 rounded shadow-sm bg-light">
-        <div className="mb-3">
-          <label className="form-label">Select Product</label>
-          <select
-            className="form-select"
-            value={selectedProduct?.productId || ''}
-            onChange={handleProductSelect}
-            required
-          >
-            <option value="">-- Select Product --</option>
-            {products.map((product) => (
-              <option key={product.productId} value={product.productId}>
-                {product.productName}
-              </option>
-            ))}
-          </select>
+    <div className="inventory-bg">
+      <div
+        className="container inventory-container py-5"
+        style={{ width: '98%', maxWidth: '100vw', margin: '0 auto' }}
+      >
+        <div className="row justify-content-center">
+          <div className="col-12">
+            <div className="card inventory-card shadow-lg border-0">
+              <div className="card-header bg-gradient-primary text-white d-flex align-items-center justify-content-between">
+                <h3 className="mb-0 fw-bold" aria-label="Update Product Price">
+                  <span role="img" aria-label="price">💲</span> Update Product Price
+                </h3>
+                <button
+                  type="button"
+                  className="btn btn-light btn-sm"
+                  style={{ borderRadius: '4px', padding: '4px 8px' }}
+                  onClick={() => navigate(-1)}
+                  aria-label="Go back"
+                  disabled={loading}
+                >
+                  <i className="bi bi-arrow-left"></i> Back
+                </button>
+              </div>
+              <div className="card-body p-4">
+                <form onSubmit={handleSubmit} className="border-0 p-0 bg-transparent">
+                  <div className="mb-3">
+                    <label className="form-label">Select Product</label>
+                    <select
+                      className="form-select"
+                      value={selectedProduct?.productId || ''}
+                      onChange={handleProductSelect}
+                      required
+                      style={inputStyle}
+                    >
+                      <option value="">-- Select Product --</option>
+                      {products.map((product) => (
+                        <option key={product.productId} value={product.productId}>
+                          {product.productName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {selectedProduct && (
+                    <>
+                      <div className="mb-3">
+                        <label className="form-label">Current Price</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={selectedProduct.price}
+                          readOnly
+                          style={inputStyle}
+                        />
+                      </div>
+
+                      <div className="mb-3">
+                        <label className="form-label">New Price</label>
+                        <input
+                          type="number"
+                          className="form-control"
+                          value={price}
+                          onChange={handlePriceChange}
+                          required
+                          min="0"
+                          step="0.01"
+                          style={inputStyle}
+                        />
+                      </div>
+
+                      <div className="mb-4">
+                        <label className="form-label">Select Employee</label>
+                        <select
+                          className="form-select"
+                          value={employeeId}
+                          onChange={handleEmployeeSelect}
+                          required
+                          style={inputStyle}
+                        >
+                          <option value="">-- Select Employee --</option>
+                          {employees.map((e) => (
+                            <option key={e.employeeId} value={e.employeeId}>
+                              {e.name} ({e.employeeId})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </>
+                  )}
+
+                  <button className="btn btn-primary w-100" type="submit" disabled={loading}>
+                    {loading ? 'Updating...' : 'Update Price'}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
-
-        {selectedProduct && (
-          <>
-            <div className="mb-3">
-              <label className="form-label">Current Price</label>
-              <input
-                type="text"
-                className="form-control"
-                value={selectedProduct.price}
-                readOnly
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">New Price</label>
-              <input
-                type="number"
-                className="form-control"
-                value={price}
-                onChange={handlePriceChange}
-                required
-                min="0"
-                step="0.01"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="form-label">Select Employee</label>
-              <select
-                className="form-select"
-                value={employeeId}
-                onChange={handleEmployeeSelect}
-                required
-              >
-                <option value="">-- Select Employee --</option>
-                {employees.map((e) => (
-                  <option key={e.employeeId} value={e.employeeId}>
-                    {e.name} ({e.employeeId})
-                  </option>
-                ))}
-              </select>
-            </div>
-          </>
-        )}
-
-        <button className="btn btn-primary w-100" type="submit" disabled={loading}>
-          {loading ? 'Updating...' : 'Update Price'}
-        </button>
-      </form>
+      </div>
+      <style>
+        {`
+          .inventory-bg {
+            min-height: 100vh;
+            background: #f8fafc;
+          }
+          .inventory-container {
+            width: 98%;
+            max-width: 100vw;
+            margin: 0 auto;
+          }
+          .inventory-card {
+            border-radius: 1.25rem;
+            overflow: hidden;
+          }
+          .bg-gradient-primary {
+            background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%) !important;
+          }
+        `}
+      </style>
     </div>
   );
 };

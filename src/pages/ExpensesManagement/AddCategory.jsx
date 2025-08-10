@@ -3,7 +3,8 @@ import axios from 'axios';
 import { FaTrashAlt, FaPlus } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'animate.css';
-import './AddCategory.css'
+import './Addcategory.css'
+
 const AddCategory = () => {
   const [categoryName, setCategoryName] = useState('');
   const [categories, setCategories] = useState([]);
