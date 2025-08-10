@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrashAlt, FaFileAlt } from "react-icons/fa";
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "animate.css";
+import { showToast } from "../../components/ToastProvider";
+
 
 const ViewExpenses = () => {
   const [expenses, setExpenses] = useState([]);
   const [filteredExpenses, setFilteredExpenses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState({ show: false, message: "", type: "", ts: null });
 
   const [fromDate, setFromDate] = useState(() => {
     const now = new Date();
@@ -25,12 +24,10 @@ const ViewExpenses = () => {
 
   useEffect(() => {
     fetchExpenses();
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     applyFilters();
-    // eslint-disable-next-line
   }, [expenses, fromDate, toDate, selectedCategory]);
 
   const fetchExpenses = async () => {
@@ -79,38 +76,15 @@ const ViewExpenses = () => {
     }
   };
 
-  const showToast = (message, type) => {
-    setToast({ show: true, message, type, ts: Date.now() });
-    setTimeout(() => setToast({ show: false, message: "", type: "", ts: null }), 3000);
-  };
-
   const handleEdit = (id) => {
     navigate(`/dashboard/expenses/edit/${id}`);
   };
 
-  // totalAmount and counts come from filteredExpenses (so badges reflect current filters)
   const totalAmount = filteredExpenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
   const expensesCount = filteredExpenses.length;
 
   return (
     <>
-      {/* Toast */}
-      {toast.show && (
-        <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 10555 }} key={toast.ts}>
-          <div
-            className={`toast align-items-center show animate__animated animate__fadeInRight ${
-              toast.type === "success" ? "bg-success text-white" : "bg-danger text-white"
-            }`}
-            role="alert"
-          >
-            <div className="d-flex justify-content-between align-items-center px-3 py-2">
-              <div>{toast.message}</div>
-            </div>
-            <div className={`toast-progress ${toast.type === "success" ? "success" : "error"}`} />
-          </div>
-        </div>
-      )}
-
       <div className="inventory-bg">
         <div className="container inventory-container py-5">
           <div className="row justify-content-center">
@@ -121,7 +95,6 @@ const ViewExpenses = () => {
                     <FaFileAlt className="me-2 fs-4" />
                     <h3 className="mb-0 fw-bold">All Expenses</h3>
                   </div>
-
                   <div className="d-flex flex-wrap gap-2 mt-2 mt-sm-0">
                     <span className="badge bg-light text-primary fs-6">
                       {expensesCount} {expensesCount === 1 ? "Expense" : "Expenses"}
@@ -131,7 +104,6 @@ const ViewExpenses = () => {
                     </span>
                   </div>
                 </div>
-
                 <div className="card-body p-4">
                   {/* Filters */}
                   <div className="row g-3 mb-3">
@@ -172,7 +144,6 @@ const ViewExpenses = () => {
                       </select>
                     </div>
                   </div>
-
                   {/* Table / content */}
                   {loading && <div className="text-primary">Loading...</div>}
                   {!loading && filteredExpenses.length === 0 ? (
@@ -223,7 +194,6 @@ const ViewExpenses = () => {
                     </div>
                   )}
                 </div>
-
                 <div className="card-footer text-end bg-white border-0">
                   <small className="text-muted">Last refreshed: {new Date().toLocaleString()}</small>
                 </div>
@@ -232,7 +202,6 @@ const ViewExpenses = () => {
           </div>
         </div>
       </div>
-
       <style>
         {`
         .inventory-bg {
