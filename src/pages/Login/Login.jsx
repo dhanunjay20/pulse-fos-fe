@@ -16,6 +16,12 @@ function Login() {
 
   useEffect(() => {
     setAnimateCard(true);
+    const loginTime = localStorage.getItem("loginTime");
+    const now = Date.now();
+    if (loginTime && now - parseInt(loginTime, 15) > 900000) {
+      localStorage.clear();
+      window.location.href = "/login";
+    }
   }, []);
 
   const handleSubmit = async (e) => {
@@ -31,6 +37,7 @@ function Login() {
 
       localStorage.setItem("user", JSON.stringify(response.data));
       localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("loginTime", Date.now().toString());
 
       showToast("Login successful!", "success");
 
