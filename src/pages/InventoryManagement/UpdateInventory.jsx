@@ -202,6 +202,7 @@ const UpdateInventory = () => {
                         value={formData.currentLevel}
                         readOnly
                         style={inputStyle}
+                        tabIndex={-1}
                       />
                     </div>
                     <div className="col-md-6">
@@ -212,6 +213,7 @@ const UpdateInventory = () => {
                         value={formData.tankCapacity}
                         readOnly
                         style={inputStyle}
+                        tabIndex={-1}
                       />
                     </div>
                   </div>
@@ -239,6 +241,7 @@ const UpdateInventory = () => {
                         value={formData.refillSpace}
                         readOnly
                         style={inputStyle}
+                        tabIndex={-1}
                       />
                     </div>
                   </div>
@@ -272,6 +275,11 @@ const UpdateInventory = () => {
           }
           .bg-gradient-primary {
             background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%) !important;
+          }
+          .readonly-input {
+            background-color: #f1f3f4 !important;
+            cursor: not-allowed !important;
+            color: #6c757d !important;
           }
         `}
       </style>
