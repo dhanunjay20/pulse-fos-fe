@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const navWrapperRef = useRef(null);
   const [navHeight, setNavHeight] = useState(70);
+
+  // Hide navbar only on /dashboard/home
+  const hideNavbar = location.pathname === '/dashboard/home';
 
   useEffect(() => {
     const measure = () => {
@@ -30,7 +34,7 @@ const DashboardLayout = () => {
   return (
     <div className="d-flex flex-column min-vh-100">
       <div ref={navWrapperRef}>
-        <Navbar onLogout={handleLogout} />
+        <Navbar onLogout={handleLogout} hideNavbar={hideNavbar} />
       </div>
 
       <main

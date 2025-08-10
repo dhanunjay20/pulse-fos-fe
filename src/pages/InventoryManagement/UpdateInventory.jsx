@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { showToast } from '../../components/ToastProvider';
+import { useNavigate } from 'react-router-dom';
+
+const inputStyle = { height: '48px', borderRadius: '8px' };
 
 const UpdateInventory = () => {
   const [products, setProducts] = useState([]);
@@ -17,6 +20,7 @@ const UpdateInventory = () => {
     employeeId: ''
   });
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('https://pulse-766719709317.asia-south1.run.app/inventory/latest')
@@ -130,61 +134,147 @@ const UpdateInventory = () => {
   };
 
   return (
-    <div
-      className="container mt-4"
-      style={{ width: '96%', maxWidth: '100vw', paddingTop: '70px' }} // Added gap for navbar
-    >
-      <h2 className="mb-4">Update Inventory</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label>Select Product</label>
-          <select className="form-select form-control-lg" name="productId" value={formData.productId} onChange={handleProductSelect}>
-            <option value="">-- Select Product --</option>
-            {products.map((p) => (
-              <option key={p.productId} value={p.productId}>{p.productName}</option>
-            ))}
-          </select>
-        </div>
+    <div className="inventory-bg">
+      <div
+        className="container inventory-container py-5"
+        style={{ width: '98%', maxWidth: '100vw', margin: '0 auto', paddingTop: '70px' }}
+      >
+        <div className="row justify-content-center">
+          <div className="col-12">
+            <div className="card inventory-card shadow-lg border-0">
+              <div className="card-header bg-gradient-primary text-white d-flex align-items-center justify-content-between">
+                <h3 className="mb-0 fw-bold" aria-label="Update Inventory">
+                  <span role="img" aria-label="inventory">🛢️</span> Update Inventory
+                </h3>
+                <button
+                  type="button"
+                  className="btn btn-light btn-sm"
+                  style={{ borderRadius: '4px', padding: '4px 8px' }}
+                  onClick={() => navigate(-1)}
+                  aria-label="Go back"
+                  disabled={loading}
+                >
+                  <i className="bi bi-arrow-left"></i> Back
+                </button>
+              </div>
+              <div className="card-body p-4">
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label className="form-label fw-semibold">Select Product</label>
+                    <select
+                      className="form-select form-control-lg"
+                      name="productId"
+                      value={formData.productId}
+                      onChange={handleProductSelect}
+                      style={inputStyle}
+                      required
+                    >
+                      <option value="">-- Select Product --</option>
+                      {products.map((p) => (
+                        <option key={p.productId} value={p.productId}>{p.productName}</option>
+                      ))}
+                    </select>
+                  </div>
 
-        <div className="mb-3">
-          <label>Select Employee</label>
-          <select className="form-select form-control-lg" name="employeeId" value={formData.employeeId} onChange={handleChange}>
-            <option value="">-- Select Employee --</option>
-            {employees.map((e) => (
-              <option key={e.employeeId} value={e.employeeId}>{e.name} ({e.employeeId})</option>
-            ))}
-          </select>
-        </div>
+                  <div className="mb-3">
+                    <label className="form-label fw-semibold">Select Employee</label>
+                    <select
+                      className="form-select form-control-lg"
+                      name="employeeId"
+                      value={formData.employeeId}
+                      onChange={handleChange}
+                      style={inputStyle}
+                      required
+                    >
+                      <option value="">-- Select Employee --</option>
+                      {employees.map((e) => (
+                        <option key={e.employeeId} value={e.employeeId}>{e.name} ({e.employeeId})</option>
+                      ))}
+                    </select>
+                  </div>
 
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <label>Current Level ({formData.metric})</label>
-            <input type="number" className="form-control form-control-lg readonly-input" value={formData.currentLevel} readOnly />
-          </div>
-          <div className="col-md-6">
-            <label>Tank Capacity ({formData.metric})</label>
-            <input type="number" className="form-control form-control-lg readonly-input" value={formData.tankCapacity} readOnly />
-          </div>
-        </div>
+                  <div className="row mb-3">
+                    <div className="col-md-6">
+                      <label className="form-label fw-semibold">Current Level ({formData.metric})</label>
+                      <input
+                        type="number"
+                        className="form-control form-control-lg readonly-input"
+                        value={formData.currentLevel}
+                        readOnly
+                        style={inputStyle}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label className="form-label fw-semibold">Tank Capacity ({formData.metric})</label>
+                      <input
+                        type="number"
+                        className="form-control form-control-lg readonly-input"
+                        value={formData.tankCapacity}
+                        readOnly
+                        style={inputStyle}
+                      />
+                    </div>
+                  </div>
 
-        <div className="row mb-4">
-          <div className="col-md-6">
-            <label>New Quantity ({formData.metric})</label>
-            <input type="number" className="form-control form-control-lg" name="newQty" value={formData.newQty} onChange={handleChange} required min="0" step="0.01" />
-          </div>
-          <div className="col-md-6">
-            <label>Refill Space ({formData.metric})</label>
-            <input type="number" className="form-control form-control-lg readonly-input" value={formData.refillSpace} readOnly />
-          </div>
-        </div>
+                  <div className="row mb-4">
+                    <div className="col-md-6">
+                      <label className="form-label fw-semibold">New Quantity ({formData.metric})</label>
+                      <input
+                        type="number"
+                        className="form-control form-control-lg"
+                        name="newQty"
+                        value={formData.newQty}
+                        onChange={handleChange}
+                        required
+                        min="0"
+                        step="0.01"
+                        style={inputStyle}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label className="form-label fw-semibold">Refill Space ({formData.metric})</label>
+                      <input
+                        type="number"
+                        className="form-control form-control-lg readonly-input"
+                        value={formData.refillSpace}
+                        readOnly
+                        style={inputStyle}
+                      />
+                    </div>
+                  </div>
 
-        <div className="d-flex justify-content-end gap-2">
-          <button type="button" className="btn btn-secondary" onClick={resetForm} disabled={loading}>Clear</button>
-          <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Adding...' : 'Add Entry'}
-          </button>
+                  <div className="d-flex justify-content-end gap-2">
+                    <button type="button" className="btn btn-secondary" onClick={resetForm} disabled={loading}>Clear</button>
+                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                      {loading ? 'Adding...' : 'Add Entry'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
-      </form>
+      </div>
+      <style>
+        {`
+          .inventory-bg {
+            min-height: 100vh;
+            background: #f8fafc;
+          }
+          .inventory-container {
+            width: 98%;
+            max-width: 100vw;
+            margin: 0 auto;
+          }
+          .inventory-card {
+            border-radius: 1.25rem;
+            overflow: hidden;
+          }
+          .bg-gradient-primary {
+            background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%) !important;
+          }
+        `}
+      </style>
     </div>
   );
 };

@@ -83,7 +83,7 @@ const DashboardHome = () => {
   return (
     <div
       className="container py-5"
-      style={{ width: '96%', maxWidth: '100vw'}}
+      style={{ width: '96%', maxWidth: '100vw', marginTop: '-70px' }}
     >
       <div className="text-center mb-5">
         <h1 className="fw-bold">Welcome back, {username}!</h1>

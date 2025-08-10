@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaTrashAlt, FaPlus } from 'react-icons/fa';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'animate.css';
-import './Addcategory.css'
+import { showToast } from '../../components/ToastProvider';
+import { useNavigate } from 'react-router-dom';
 
 const AddCategory = () => {
   const [categoryName, setCategoryName] = useState('');
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategories();
+    // eslint-disable-next-line
   }, []);
 
   const fetchCategories = async () => {
@@ -51,91 +51,106 @@ const AddCategory = () => {
     }
   };
 
-  const showToast = (message, type) => {
-    setToast({ show: true, message, type });
-    setTimeout(() => setToast({ show: false, message: '', type: '' }), 3000);
+  const handleBack = () => {
+    navigate(-1);
   };
 
   return (
-    <div className="container-fluid d-flex justify-content-center py-4">
-      <div className="w-100" style={{ maxWidth: '1296px' }}>
-        <div className="text-center mb-4">
-          <h3 className="fw-bold text-primary">
-            <FaPlus className="me-2" />Add Expense Category
-          </h3>
-        </div>
-
-        {/* Toast Message */}
-        {toast.show && (
-          <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 1055 }}>
-            <div
-              className={`toast show animate__animated animate__fadeInRight text-white shadow rounded ${
-                toast.type === 'success' ? 'bg-success' : 'bg-danger'
-              }`}
-            >
-              <div className="d-flex justify-content-between align-items-center px-3 py-2">
-                <strong className="me-auto">{toast.message}</strong>
+    <div className="inventory-bg" style={{ minHeight: '100vh' }}>
+      <div
+        className="container inventory-container py-5"
+        style={{ width: '98%', maxWidth: '100vw' }}
+      >
+        <div className="row justify-content-center">
+          <div className="col-12">
+            <div className="card inventory-card shadow-lg border-0">
+              <div className="card-header bg-gradient-primary text-white d-flex align-items-center justify-content-between">
+                <h3 className="mb-0 fw-bold">
+                  <FaPlus className="me-2" /> Add Expense Category
+                </h3>
+                <button
+                  className="btn btn-light btn-sm"
+                  onClick={handleBack}
+                  disabled={loading}
+                >
+                  <i className="bi bi-arrow-left"></i> Back
+                </button>
               </div>
-              <div className={`toast-progress-bar ${toast.type}`} />
+              <div className="card-body p-4">
+                <form onSubmit={handleSubmitCategory} className="row g-3 justify-content-center mb-4">
+                  <div className="col-md-6 col-sm-10">
+                    <input
+                      type="text"
+                      className="form-control form-control-lg rounded shadow-sm"
+                      style={{ height: '45px' }}
+                      placeholder="Enter category name"
+                      value={categoryName}
+                      onChange={(e) => setCategoryName(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="col-auto">
+                    <button type="submit" className="btn btn-primary px-4 shadow-sm" style={{ height: '45px' }}>
+                      Add
+                    </button>
+                  </div>
+                </form>
+                <div className="table-responsive">
+                  {loading ? (
+                    <div className="text-center text-muted">Loading...</div>
+                  ) : categories.length === 0 ? (
+                    <p className="text-center text-muted">No categories added yet.</p>
+                  ) : (
+                    <table className="table table-striped table-hover align-middle text-center shadow-sm">
+                      <thead className="table-primary">
+                        <tr>
+                          <th>#</th>
+                          <th>Category Name</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {categories.map((cat, index) => (
+                          <tr key={cat.id}>
+                            <td>{index + 1}</td>
+                            <td>{cat.name}</td>
+                            <td>
+                              <FaTrashAlt
+                                className="text-danger"
+                                role="button"
+                                title="Delete"
+                                onClick={() => handleDeleteCategory(cat.id, cat.name)}
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-        )}
-
-        {/* Add Form */}
-        <form onSubmit={handleSubmitCategory} className="row g-3 justify-content-center mb-4">
-          <div className="col-md-6 col-sm-10">
-            <input
-              type="text"
-              className="form-control rounded shadow-sm"
-              style={{ height: '45px' }}
-              placeholder="Enter category name"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="col-auto">
-            <button type="submit" className="btn btn-primary px-4 shadow-sm" style={{ height: '45px' }}>
-              Add
-            </button>
-          </div>
-        </form>
-
-        {/* Category Table */}
-        <div className="table-responsive">
-          {loading ? (
-            <div className="text-center text-muted">Loading...</div>
-          ) : categories.length === 0 ? (
-            <p className="text-center text-muted">No categories added yet.</p>
-          ) : (
-            <table className="table table-striped table-hover align-middle text-center shadow-sm">
-              <thead className="table-primary">
-                <tr>
-                  <th>#</th>
-                  <th>Category Name</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {categories.map((cat, index) => (
-                  <tr key={cat.id}>
-                    <td>{index + 1}</td>
-                    <td>{cat.name}</td>
-                    <td>
-                      <FaTrashAlt
-                        className="text-danger"
-                        role="button"
-                        title="Delete"
-                        onClick={() => handleDeleteCategory(cat.id, cat.name)}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
         </div>
       </div>
+      <style>
+        {`
+        .inventory-bg {
+          min-height: 100vh;
+        }
+        .inventory-container {
+          width: 98%;
+          max-width: 100vw;
+        }
+        .inventory-card {
+          border-radius: 1.25rem;
+          overflow: hidden;
+        }
+        .bg-gradient-primary {
+          background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
+        }
+        `}
+      </style>
     </div>
   );
 };

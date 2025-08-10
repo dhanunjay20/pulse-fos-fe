@@ -1,28 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../assets/fos_logo.png';
+import './Navbar.css';
 
-const Navbar = ({ onLogout }) => {
+const Navbar = ({ hideNavbar, onLogout }) => {
+  if (hideNavbar) return null;
+
   const navigate = useNavigate();
   const [employee, setEmployee] = useState({ name: '', id: '' });
+  const navbarCollapseRef = useRef(null);
 
   useEffect(() => {
     const empData = JSON.parse(localStorage.getItem('employee'));
     if (empData) {
       setEmployee({ name: empData.name, id: empData.id });
     }
-
-    // Auto-close mobile menu when a link is clicked
-    const navLinks = document.querySelectorAll('.navbar-nav .nav-link, .dropdown-item');
-    const navbarCollapse = document.querySelector('.navbar-collapse');
-
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        if (navbarCollapse.classList.contains('show')) {
-          new window.bootstrap.Collapse(navbarCollapse).hide();
-        }
-      });
-    });
   }, []);
 
   const handleLogout = () => {
@@ -35,12 +27,21 @@ const Navbar = ({ onLogout }) => {
     navigate('/dashboard/home');
   };
 
+  const handleNavLinkClick = () => {
+    if (
+      navbarCollapseRef.current &&
+      navbarCollapseRef.current.classList.contains('show')
+    ) {
+      new window.bootstrap.Collapse(navbarCollapseRef.current).hide();
+    }
+  };
+
   return (
     <nav
       className="navbar navbar-expand-lg navbar-dark bg-dark px-3 fixed-top shadow"
-      style={{ zIndex: 1030 }} // ensures it stays above content
+      style={{ zIndex: 1030 }}
     >
-      <NavLink className="navbar-brand d-flex align-items-center" to="/dashboard/home">
+      <NavLink className="navbar-brand d-flex align-items-center" to="/dashboard/home" onClick={handleNavLinkClick}>
         <img src={logo} alt="Logo" height="40" className="me-2" />
         <span>FOS</span>
       </NavLink>
@@ -57,7 +58,7 @@ const Navbar = ({ onLogout }) => {
         <span className="navbar-toggler-icon"></span>
       </button>
 
-      <div className="collapse navbar-collapse" id="navbarNavDropdown">
+      <div className="collapse navbar-collapse" id="navbarNavDropdown" ref={navbarCollapseRef}>
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           {/* Inventory */}
           <li className="nav-item dropdown">
@@ -65,8 +66,8 @@ const Navbar = ({ onLogout }) => {
               <i className="bi bi-box"></i> Inventory
             </a>
             <ul className="dropdown-menu">
-              <li><NavLink className="dropdown-item" to="/dashboard/inventory/view"><i className="bi bi-box-seam me-1"></i>View Inventory</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/inventory/update"><i className="bi bi-pencil-square me-1"></i>Update Inventory</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/inventory/view" onClick={handleNavLinkClick}><i className="bi bi-box-seam me-1"></i>View Inventory</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/inventory/update" onClick={handleNavLinkClick}><i className="bi bi-pencil-square me-1"></i>Update Inventory</NavLink></li>
             </ul>
           </li>
 
@@ -76,15 +77,15 @@ const Navbar = ({ onLogout }) => {
               <i className="bi bi-bag"></i> Products
             </a>
             <ul className="dropdown-menu">
-              <li><NavLink className="dropdown-item" to="/dashboard/products/view"><i className="bi bi-card-list me-1"></i>View Products</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/products/add"><i className="bi bi-plus-square me-1"></i>Add Product</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/products/price"><i className="bi bi-currency-dollar me-1"></i>Update Price</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/products/view" onClick={handleNavLinkClick}><i className="bi bi-card-list me-1"></i>View Products</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/products/add" onClick={handleNavLinkClick}><i className="bi bi-plus-square me-1"></i>Add Product</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/products/price" onClick={handleNavLinkClick}><i className="bi bi-currency-dollar me-1"></i>Update Price</NavLink></li>
             </ul>
           </li>
 
           {/* Sales & Collections */}
           <li className="nav-item">
-            <NavLink className="nav-link" to="/dashboard/salescollections">
+            <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
               <i className="bi bi-cash-coin me-1"></i>Sales & Collections
             </NavLink>
           </li>
@@ -95,8 +96,8 @@ const Navbar = ({ onLogout }) => {
               <i className="bi bi-people"></i> Customers
             </a>
             <ul className="dropdown-menu">
-              <li><NavLink className="dropdown-item" to="/dashboard/customers/view"><i className="bi bi-person-lines-fill me-1"></i>View Customers</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/customers/add"><i className="bi bi-person-plus me-1"></i>Add Customer</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/customers/view" onClick={handleNavLinkClick}><i className="bi bi-person-lines-fill me-1"></i>View Customers</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/customers/add" onClick={handleNavLinkClick}><i className="bi bi-person-plus me-1"></i>Add Customer</NavLink></li>
             </ul>
           </li>
 
@@ -106,9 +107,9 @@ const Navbar = ({ onLogout }) => {
               <i className="bi bi-receipt"></i> Expenses
             </a>
             <ul className="dropdown-menu">
-              <li><NavLink className="dropdown-item" to="/dashboard/expenses/view"><i className="bi bi-list-ul me-1"></i>View Expenses</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/expenses/add"><i className="bi bi-plus-lg me-1"></i>Add Expense</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/expenses/add-category"><i className="bi bi-folder-plus me-1"></i>Add Category</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/expenses/view" onClick={handleNavLinkClick}><i className="bi bi-list-ul me-1"></i>View Expenses</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/expenses/add" onClick={handleNavLinkClick}><i className="bi bi-plus-lg me-1"></i>Add Expense</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/expenses/add-category" onClick={handleNavLinkClick}><i className="bi bi-folder-plus me-1"></i>Add Category</NavLink></li>
             </ul>
           </li>
 
@@ -118,8 +119,8 @@ const Navbar = ({ onLogout }) => {
               <i className="bi bi-folder2-open"></i> Documents
             </a>
             <ul className="dropdown-menu">
-              <li><NavLink className="dropdown-item" to="/dashboard/documents/view"><i className="bi bi-file-earmark-text me-1"></i>View Documents</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/documents/upload"><i className="bi bi-upload me-1"></i>Upload Documents</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/documents/view" onClick={handleNavLinkClick}><i className="bi bi-file-earmark-text me-1"></i>View Documents</NavLink></li>
+              <li><NavLink className="dropdown-item" to="/dashboard/documents/upload" onClick={handleNavLinkClick}><i className="bi bi-upload me-1"></i>Upload Documents</NavLink></li>
             </ul>
           </li>
         </ul>

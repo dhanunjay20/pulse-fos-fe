@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { showToast } from "../../components/ToastProvider"; // Adjust path as needed
+import { showToast } from "../../components/ToastProvider";
 import "./Login.css";
 
 function Login() {
