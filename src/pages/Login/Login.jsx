@@ -39,18 +39,28 @@ function Login() {
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("loginTime", Date.now().toString());
 
+      // Set role and employee info for navbar/route protection
+      const role = response.data?.employeeRole?.toLowerCase(); // 'owner', 'manager', 'employee'
+      localStorage.setItem("role", role);
+      localStorage.setItem(
+        "employee",
+        JSON.stringify({
+          name: response.data?.employeeName,
+          id: response.data?.employeeId,
+        })
+      );
+
       showToast("Login successful!", "success");
 
-      const role = response.data?.employeeRole?.toUpperCase();
       setTimeout(() => {
         switch (role) {
-          case "EMPLOYEE":
+          case "employee":
             navigate("/dashboard/employee");
             break;
-          case "MANAGER":
+          case "manager":
             navigate("/dashboard/manager");
             break;
-          case "OWNER":
+          case "owner":
             navigate("/dashboard/home");
             break;
           default:
