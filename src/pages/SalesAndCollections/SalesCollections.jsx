@@ -108,8 +108,18 @@ const SalesCollections = () => {
             row.refillSpace =
               (invProduct.tankCapacity ?? 0) - (invProduct.currentLevel ?? 0);
             row.metric = invProduct.metric || "liters";
+          } else {
+            row.currentLevel = 0;
+            row.tankCapacity = 0;
+            row.refillSpace = 0;
+            row.metric = "liters";
           }
-        } catch {}
+        } catch {
+          row.currentLevel = 0;
+          row.tankCapacity = 0;
+          row.refillSpace = 0;
+          row.metric = "liters";
+        }
       }
     }
 
@@ -143,9 +153,9 @@ const SalesCollections = () => {
 
   const formatDate = (date) => {
     const pad = (n) => (n < 10 ? "0" + n : n);
-    return `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()} ${pad(
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(
       date.getHours()
-    )}:${pad(date.getMinutes())}`;
+    )}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
   };
 
   const handleSubmit = async (e) => {
@@ -157,15 +167,33 @@ const SalesCollections = () => {
       setLoading(false);
       return;
     }
-
+    if (products.length === 0) {
+      showToast("Add at least one product", "error");
+      setLoading(false);
+      return;
+    }
     if (products.some((p) => p.error)) {
       showToast("Fix errors before submitting", "error");
       setLoading(false);
       return;
     }
-
     if (parseFloat(shortCollections) < -10) {
       showToast("Short collections cannot be less than -10", "error");
+      setLoading(false);
+      return;
+    }
+    if (
+      products.some(
+        (p) =>
+          !p.productId ||
+          !p.productName ||
+          !p.gun ||
+          isNaN(parseFloat(p.opening)) ||
+          isNaN(parseFloat(p.closing)) ||
+          isNaN(parseFloat(p.price))
+      )
+    ) {
+      showToast("Fill all product fields", "error");
       setLoading(false);
       return;
     }
@@ -174,13 +202,16 @@ const SalesCollections = () => {
       date: formatDate(entryDate),
       employeeId: parseInt(employeeId),
       products: products.map((p) => ({
-        ...p,
+        productId: p.productId,
+        productName: p.productName,
+        gun: p.gun,
         opening: parseFloat(p.opening) || 0,
         closing: parseFloat(p.closing) || 0,
         price: parseFloat(p.price) || 0,
         testing: parseFloat(p.testing) || 0,
         salesLiters: parseFloat(p.salesLiters) || 0,
         salesRupees: parseFloat(p.salesRupees) || 0,
+        metric: p.metric || "liters",
       })),
     };
 
@@ -194,29 +225,30 @@ const SalesCollections = () => {
     };
 
     try {
+      await Promise.all([
+        axios.post("https://pulse-766719709317.asia-south1.run.app/sales", payloadSales),
+        axios.post("https://pulse-766719709317.asia-south1.run.app/collections", payloadCollections),
+      ]);
+
       const inventoryUpdates = products.map((p) =>
         axios.post("https://pulse-766719709317.asia-south1.run.app/inventory", {
           productId: p.productId,
           quantity: -p.salesLiters,
-          metric: p.metric,
+          metric: p.metric || "liters",
           employeeId: parseInt(employeeId),
         })
       );
-
-      await Promise.all([
-        axios.post("https://pulse-766719709317.asia-south1.run.app/sales", payloadSales),
-        axios.post(
-          "https://pulse-766719709317.asia-south1.run.app/collections",
-          payloadCollections
-        ),
-        ...inventoryUpdates,
-      ]);
+      await Promise.all(inventoryUpdates);
 
       showToast("Sales & Collections submitted successfully", "success");
       window.scrollTo({ top: 0, behavior: "smooth" });
       setTimeout(() => window.location.reload(), 3000);
-    } catch {
-      showToast("Submission failed. Please try again.", "error");
+    } catch (err) {
+      showToast(
+        err?.response?.data?.message ||
+          "Submission failed. Please check your data and try again.",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
