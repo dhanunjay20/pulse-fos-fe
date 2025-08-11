@@ -84,7 +84,7 @@ const UploadDocument = () => {
             <div className="card inventory-card shadow-lg border-0">
               <div className="card-header bg-gradient-primary text-white d-flex align-items-center justify-content-between">
                 <h3 className="mb-0 fw-bold">
-                  <span role="img" aria-label="doc">📄</span> Upload New Document
+                  <span role="img" aria-label="doc">📄</span> Upload Document
                 </h3>
                 <button
                   className="btn btn-light btn-sm"

@@ -9,12 +9,15 @@ const Navbar = ({ hideNavbar, onLogout }) => {
   const navigate = useNavigate();
   const [employee, setEmployee] = useState({ name: '', id: '' });
   const navbarCollapseRef = useRef(null);
+  const [role, setRole] = useState('');
 
   useEffect(() => {
     const empData = JSON.parse(localStorage.getItem('employee'));
     if (empData) {
       setEmployee({ name: empData.name, id: empData.id });
     }
+    const storedRole = localStorage.getItem('role');
+    if (storedRole) setRole(storedRole);
   }, []);
 
   const handleLogout = () => {
@@ -60,75 +63,160 @@ const Navbar = ({ hideNavbar, onLogout }) => {
 
       <div className="collapse navbar-collapse" id="navbarNavDropdown" ref={navbarCollapseRef}>
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-          {/* Inventory */}
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-              <i className="bi bi-box"></i> Inventory
-            </a>
-            <ul className="dropdown-menu">
-              <li><NavLink className="dropdown-item" to="/dashboard/inventory/view" onClick={handleNavLinkClick}><i className="bi bi-box-seam me-1"></i>View Inventory</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/inventory/update" onClick={handleNavLinkClick}><i className="bi bi-pencil-square me-1"></i>Update Inventory</NavLink></li>
-            </ul>
-          </li>
+          {/* Owner: All links */}
+          {role === 'owner' && (
+            <>
+              {/* Inventory */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-box"></i> Inventory
+                </a>
+                <ul className="dropdown-menu">
+                  <li><NavLink className="dropdown-item" to="/dashboard/inventory/view" onClick={handleNavLinkClick}><i className="bi bi-box-seam me-1"></i>View Inventory</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/inventory/update" onClick={handleNavLinkClick}><i className="bi bi-pencil-square me-1"></i>Update Inventory</NavLink></li>
+                </ul>
+              </li>
+              {/* Products */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-bag"></i> Products
+                </a>
+                <ul className="dropdown-menu">
+                  <li><NavLink className="dropdown-item" to="/dashboard/products/view" onClick={handleNavLinkClick}><i className="bi bi-card-list me-1"></i>View Products</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/products/add" onClick={handleNavLinkClick}><i className="bi bi-plus-square me-1"></i>Add Product</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/products/price" onClick={handleNavLinkClick}><i className="bi bi-currency-dollar me-1"></i>Update Price</NavLink></li>
+                </ul>
+              </li>
+              {/* Sales & Collections */}
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
+                  <i className="bi bi-cash-coin me-1"></i>Sales & Collections
+                </NavLink>
+              </li>
+              {/* Customers */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-people"></i> Customers
+                </a>
+                <ul className="dropdown-menu">
+                  <li><NavLink className="dropdown-item" to="/dashboard/customers/view" onClick={handleNavLinkClick}><i className="bi bi-person-lines-fill me-1"></i>View Customers</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/customers/add" onClick={handleNavLinkClick}><i className="bi bi-person-plus me-1"></i>Add Customer</NavLink></li>
+                </ul>
+              </li>
+              {/* Expenses */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-receipt"></i> Expenses
+                </a>
+                <ul className="dropdown-menu">
+                  <li><NavLink className="dropdown-item" to="/dashboard/expenses/view" onClick={handleNavLinkClick}><i className="bi bi-list-ul me-1"></i>View Expenses</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/expenses/add" onClick={handleNavLinkClick}><i className="bi bi-plus-lg me-1"></i>Add Expense</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/expenses/add-category" onClick={handleNavLinkClick}><i className="bi bi-folder-plus me-1"></i>Add Category</NavLink></li>
+                </ul>
+              </li>
+              {/* Documents */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-folder2-open"></i> Documents
+                </a>
+                <ul className="dropdown-menu">
+                  <li><NavLink className="dropdown-item" to="/dashboard/documents/view" onClick={handleNavLinkClick}><i className="bi bi-file-earmark-text me-1"></i>View Documents</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/documents/upload" onClick={handleNavLinkClick}><i className="bi bi-upload me-1"></i>Upload Documents</NavLink></li>
+                </ul>
+              </li>
+            </>
+          )}
 
-          {/* Products */}
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-              <i className="bi bi-bag"></i> Products
-            </a>
-            <ul className="dropdown-menu">
-              <li><NavLink className="dropdown-item" to="/dashboard/products/view" onClick={handleNavLinkClick}><i className="bi bi-card-list me-1"></i>View Products</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/products/add" onClick={handleNavLinkClick}><i className="bi bi-plus-square me-1"></i>Add Product</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/products/price" onClick={handleNavLinkClick}><i className="bi bi-currency-dollar me-1"></i>Update Price</NavLink></li>
-            </ul>
-          </li>
+          {/* Manager: Main navs and subnavs */}
+          {role === 'manager' && (
+            <>
+              {/* Sales Data */}
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
+                  <i className="bi bi-cash-coin me-1"></i>Sales Data
+                </NavLink>
+              </li>
+              {/* Manage Inventory */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-box"></i> Manage Inventory
+                </a>
+                <ul className="dropdown-menu">
+                  <li><NavLink className="dropdown-item" to="/dashboard/inventory/view" onClick={handleNavLinkClick}><i className="bi bi-box-seam me-1"></i>View Inventory</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/inventory/update" onClick={handleNavLinkClick}><i className="bi bi-pencil-square me-1"></i>Update Inventory</NavLink></li>
+                </ul>
+              </li>
+              {/* Manage Product */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-bag"></i> Manage Product
+                </a>
+                <ul className="dropdown-menu">
+                  <li><NavLink className="dropdown-item" to="/dashboard/products/view" onClick={handleNavLinkClick}><i className="bi bi-card-list me-1"></i>View Products</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/products/add" onClick={handleNavLinkClick}><i className="bi bi-plus-square me-1"></i>Add Product</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/products/price" onClick={handleNavLinkClick}><i className="bi bi-currency-dollar me-1"></i>Update Price</NavLink></li>
+                </ul>
+              </li>
+              {/* Staff Management */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-person-badge"></i> Staff Management
+                </a>
+                <ul className="dropdown-menu">
+                  <li><NavLink className="dropdown-item" to="/dashboard/staff/view" onClick={handleNavLinkClick}><i className="bi bi-person-lines-fill me-1"></i>View Staff</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/staff/add" onClick={handleNavLinkClick}><i className="bi bi-person-plus me-1"></i>Add Staff</NavLink></li>
+                </ul>
+              </li>
+              {/* Customers */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-people"></i> Customers
+                </a>
+                <ul className="dropdown-menu">
+                  <li><NavLink className="dropdown-item" to="/dashboard/customers/view" onClick={handleNavLinkClick}><i className="bi bi-person-lines-fill me-1"></i>View Customers</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/customers/add" onClick={handleNavLinkClick}><i className="bi bi-person-plus me-1"></i>Add Customer</NavLink></li>
+                </ul>
+              </li>
+              {/* Expenses */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-receipt"></i> Expenses
+                </a>
+                <ul className="dropdown-menu">
+                  <li><NavLink className="dropdown-item" to="/dashboard/expenses/view" onClick={handleNavLinkClick}><i className="bi bi-list-ul me-1"></i>View Expenses</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/expenses/add" onClick={handleNavLinkClick}><i className="bi bi-plus-lg me-1"></i>Add Expense</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/expenses/add-category" onClick={handleNavLinkClick}><i className="bi bi-folder-plus me-1"></i>Add Category</NavLink></li>
+                </ul>
+              </li>
+              {/* Documents */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-folder2-open"></i> Documents
+                </a>
+                <ul className="dropdown-menu">
+                  <li><NavLink className="dropdown-item" to="/dashboard/documents/view" onClick={handleNavLinkClick}><i className="bi bi-file-earmark-text me-1"></i>View Documents</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/documents/upload" onClick={handleNavLinkClick}><i className="bi bi-upload me-1"></i>Upload Documents</NavLink></li>
+                </ul>
+              </li>
+            </>
+          )}
 
-          {/* Sales & Collections */}
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
-              <i className="bi bi-cash-coin me-1"></i>Sales & Collections
-            </NavLink>
-          </li>
-
-          {/* Customers */}
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-              <i className="bi bi-people"></i> Customers
-            </a>
-            <ul className="dropdown-menu">
-              <li><NavLink className="dropdown-item" to="/dashboard/customers/view" onClick={handleNavLinkClick}><i className="bi bi-person-lines-fill me-1"></i>View Customers</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/customers/add" onClick={handleNavLinkClick}><i className="bi bi-person-plus me-1"></i>Add Customer</NavLink></li>
-            </ul>
-          </li>
-
-          {/* Expenses */}
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-              <i className="bi bi-receipt"></i> Expenses
-            </a>
-            <ul className="dropdown-menu">
-              <li><NavLink className="dropdown-item" to="/dashboard/expenses/view" onClick={handleNavLinkClick}><i className="bi bi-list-ul me-1"></i>View Expenses</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/expenses/add" onClick={handleNavLinkClick}><i className="bi bi-plus-lg me-1"></i>Add Expense</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/expenses/add-category" onClick={handleNavLinkClick}><i className="bi bi-folder-plus me-1"></i>Add Category</NavLink></li>
-            </ul>
-          </li>
-
-          {/* Documents */}
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-              <i className="bi bi-folder2-open"></i> Documents
-            </a>
-            <ul className="dropdown-menu">
-              <li><NavLink className="dropdown-item" to="/dashboard/documents/view" onClick={handleNavLinkClick}><i className="bi bi-file-earmark-text me-1"></i>View Documents</NavLink></li>
-              <li><NavLink className="dropdown-item" to="/dashboard/documents/upload" onClick={handleNavLinkClick}><i className="bi bi-upload me-1"></i>Upload Documents</NavLink></li>
-            </ul>
-          </li>
+          {/* Employee: Only Sales & Collections */}
+          {role === 'employee' && (
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
+                <i className="bi bi-cash-coin me-1"></i>Sales & Collections
+              </NavLink>
+            </li>
+          )}
         </ul>
 
-        {/* Right side: employee and logout */}
+        {/* Right side: employee and logout, Home only for owner */}
         <div className="d-flex align-items-center text-white gap-3">
           <span>{employee.name} (ID: {employee.id})</span>
-          <button className="btn btn-outline-light btn-sm" onClick={goHome}>Home</button>
+          {role === 'owner' && (
+            <button className="btn btn-outline-light btn-sm" onClick={goHome}>Home</button>
+          )}
           <button className="btn btn-danger btn-sm" onClick={handleLogout}>Logout</button>
         </div>
       </div>
