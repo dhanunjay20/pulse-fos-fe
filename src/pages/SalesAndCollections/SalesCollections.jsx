@@ -321,9 +321,9 @@ const SalesCollections = () => {
                       {[
                         { label: "Product Name", field: "productName", type: "select" },
                         { label: "Gun", field: "gun", type: "select" },
-                        { label: "Opening", field: "opening" },
+                        { label: "Opening", field: "opening", readOnly: true },
                         { label: "Closing", field: "closing" },
-                        { label: "Price", field: "price" },
+                        { label: "Price", field: "price", readOnly: true },
                         { label: "Testing", field: "testing" },
                         { label: "Sales Liters", field: "salesLiters", readOnly: true },
                         { label: "Sales Rupees", field: "salesRupees", readOnly: true },
