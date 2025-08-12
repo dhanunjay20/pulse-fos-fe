@@ -140,7 +140,6 @@ function Registration() {
                     name="employeeEmail"
                     value={formData.employeeEmail}
                     onChange={handleChange}
-                    required
                   />
                 </div>
                 <div className="col-md-6">
