@@ -21,6 +21,7 @@ import ManagerDashboard from "./pages/Dashboards/ManagerDashboard";
 import OwnerDashboard from "./pages/Dashboards/OwnerDashboard";
 import EmployeeDashboard from "./pages/Dashboards/EmployeeDashboard";
 import ToastProvider from "./Components/ToastProvider";
+import SalesGraph from "./pages/FinanceGraphs/SalesGraph"
 
 const App = () => {
   return (
@@ -61,6 +62,7 @@ const App = () => {
           <Route path="documents/upload" element={<UploadDocument />} />
           <Route path="customers/view" element={<ViewCustomers />} />
           <Route path="customers/add" element={<AddNewCustomer />} />
+          <Route path="salesgraph" element={<SalesGraph />} />
         </Route>
 
         {/* Catch-all route */}

@@ -43,7 +43,7 @@ const cards = [
     description: 'Track expenses, income, and ensure financial control.',
     buttonText: 'View Finance',
     icon: 'bi-bar-chart-line',
-    path: '/dashboard/customers',
+    path: '/dashboard/salesgraph',
   },
   {
     title: 'Settings & Profile',

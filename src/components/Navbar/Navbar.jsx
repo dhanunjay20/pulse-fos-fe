@@ -90,7 +90,7 @@ const Navbar = ({ hideNavbar, onLogout }) => {
               {/* Sales & Collections */}
               <li className="nav-item">
                 <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
-                  <i className="bi bi-cash-coin me-1"></i>Sales & Collections
+                  <i className="bi bi-cash-coin me-1"></i>Sales data
                 </NavLink>
               </li>
               {/* Customers */}
@@ -139,7 +139,7 @@ const Navbar = ({ hideNavbar, onLogout }) => {
               {/* Manage Inventory */}
               <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                  <i className="bi bi-box"></i> Manage Inventory
+                  <i className="bi bi-box"></i> Inventory
                 </a>
                 <ul className="dropdown-menu">
                   <li><NavLink className="dropdown-item" to="/dashboard/inventory/view" onClick={handleNavLinkClick}><i className="bi bi-box-seam me-1"></i>View Inventory</NavLink></li>
@@ -149,7 +149,7 @@ const Navbar = ({ hideNavbar, onLogout }) => {
               {/* Manage Product */}
               <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                  <i className="bi bi-bag"></i> Manage Product
+                  <i className="bi bi-bag"></i> Product
                 </a>
                 <ul className="dropdown-menu">
                   <li><NavLink className="dropdown-item" to="/dashboard/products/view" onClick={handleNavLinkClick}><i className="bi bi-card-list me-1"></i>View Products</NavLink></li>
@@ -160,7 +160,7 @@ const Navbar = ({ hideNavbar, onLogout }) => {
               {/* Staff Management */}
               <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                  <i className="bi bi-person-badge"></i> Staff Management
+                  <i className="bi bi-person-badge"></i> Staff
                 </a>
                 <ul className="dropdown-menu">
                   <li><NavLink className="dropdown-item" to="/dashboard/staff/view" onClick={handleNavLinkClick}><i className="bi bi-person-lines-fill me-1"></i>View Staff</NavLink></li>
