@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../assets/fos_logo.png';
 import './Navbar.css';
@@ -8,8 +8,8 @@ const Navbar = ({ hideNavbar, onLogout }) => {
 
   const navigate = useNavigate();
   const [employee, setEmployee] = useState({ name: '', id: '' });
-  const navbarCollapseRef = useRef(null);
   const [role, setRole] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const empData = JSON.parse(localStorage.getItem('employee'));
@@ -31,17 +31,16 @@ const Navbar = ({ hideNavbar, onLogout }) => {
   };
 
   const handleNavLinkClick = () => {
-    if (
-      navbarCollapseRef.current &&
-      navbarCollapseRef.current.classList.contains('show')
-    ) {
-      new window.bootstrap.Collapse(navbarCollapseRef.current).hide();
-    }
+    setMenuOpen(false);
+  };
+
+  const handleMenuToggle = () => {
+    setMenuOpen((prev) => !prev);
   };
 
   return (
     <nav
-      className="navbar navbar-expand-lg navbar-dark bg-dark px-3 fixed-top shadow"
+      className="navbar navbar-expand-lg navbar-dark px-3 fixed-top shadow navbar-gradient"
       style={{ zIndex: 1030 }}
     >
       <NavLink className="navbar-brand d-flex align-items-center" to="/dashboard/home" onClick={handleNavLinkClick}>
@@ -49,19 +48,23 @@ const Navbar = ({ hideNavbar, onLogout }) => {
         <span>FOS</span>
       </NavLink>
 
+      {/* Hamburger or Cross icon */}
       <button
         className="navbar-toggler"
         type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNavDropdown"
         aria-controls="navbarNavDropdown"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+        aria-expanded={menuOpen}
+        aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+        onClick={handleMenuToggle}
       >
-        <span className="navbar-toggler-icon"></span>
+        {menuOpen ? (
+          <span style={{ fontSize: '2rem', color: '#fff' }}>&#10005;</span>
+        ) : (
+          <span className="navbar-toggler-icon"></span>
+        )}
       </button>
 
-      <div className="collapse navbar-collapse" id="navbarNavDropdown" ref={navbarCollapseRef}>
+      <div className={`collapse navbar-collapse${menuOpen ? ' show' : ''}`} id="navbarNavDropdown">
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           {/* Owner: All links */}
           {role === 'owner' && (

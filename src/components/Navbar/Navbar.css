@@ -29,3 +29,6 @@
 .btn-outline-light {
     border-radius: 0 20px 20px 0;
 }
+.navbar-gradient {
+  background: linear-gradient(90deg, #ff9966 0%, #ff5e62 50%, #8f00ff 100%) !important;
+}
