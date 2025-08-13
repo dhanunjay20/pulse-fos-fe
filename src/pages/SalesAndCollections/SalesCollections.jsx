@@ -291,6 +291,7 @@ const SalesCollections = () => {
                         maxDate={new Date()}
                         className="form-control form-control-lg"
                         required
+                        readOnly
                       />
                     </div>
                     <div>

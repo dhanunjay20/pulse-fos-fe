@@ -29,7 +29,7 @@ const cards = [
     description: 'Oversee employee schedules, roles, and performance metrics.',
     buttonText: 'View Staff',
     icon: 'bi-people',
-    path: '/dashboard/employee',
+    path: '/dashboard/staff/view',
   },
   {
     title: 'Customers',

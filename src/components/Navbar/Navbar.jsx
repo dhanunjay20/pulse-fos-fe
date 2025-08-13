@@ -167,7 +167,7 @@ const Navbar = ({ hideNavbar, onLogout }) => {
                 </a>
                 <ul className="dropdown-menu">
                   <li><NavLink className="dropdown-item" to="/dashboard/staff/view" onClick={handleNavLinkClick}><i className="bi bi-person-lines-fill me-1"></i>View Staff</NavLink></li>
-                  <li><NavLink className="dropdown-item" to="/dashboard/staff/add" onClick={handleNavLinkClick}><i className="bi bi-person-plus me-1"></i>Add Staff</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/staff/set-duty" onClick={handleNavLinkClick}><i className="bi bi-person-plus me-1"></i>Set Duty</NavLink></li>
                 </ul>
               </li>
               {/* Customers */}
