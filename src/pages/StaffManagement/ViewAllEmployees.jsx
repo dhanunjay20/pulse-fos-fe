@@ -8,8 +8,13 @@ const ViewAllEmployees = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  const fetchEmployees = () => {
+    setLoading(true);
     axios
-      .get("https://pulse-766719709317.asia-south1.run.app/active")
+      .get("http://localhost:8080/employees") // Fetch all employees
       .then((res) => {
         const filtered = res.data.filter(
           (emp) => emp.employeeRole?.toUpperCase() === "EMPLOYEE"
@@ -22,7 +27,25 @@ const ViewAllEmployees = () => {
         showToast("Failed to load employees", "error");
         setLoading(false);
       });
-  }, []);
+  };
+
+  const handleStatusChange = (employeeId, newStatus) => {
+    axios
+      .put(
+        `http://localhost:8080/employee/${employeeId}/status?isActive=${newStatus}`
+      )
+      .then(() => {
+        showToast("Status updated successfully", "success");
+        setEmployees((prev) =>
+          prev.map((emp) =>
+            emp.employeeId === employeeId ? { ...emp, active: newStatus } : emp
+          )
+        );
+      })
+      .catch(() => {
+        showToast("Failed to update status", "error");
+      });
+  };
 
   return (
     <div className="inventory-bg">
@@ -59,6 +82,7 @@ const ViewAllEmployees = () => {
                           <th>Phone</th>
                           <th>Role</th>
                           <th>Status</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -76,11 +100,34 @@ const ViewAllEmployees = () => {
                               </span>
                             </td>
                             <td>
-                              <span className={`badge rounded-pill px-3 py-2 fs-6 ${
-                                emp.active === true ? "bg-success" : "bg-danger"
-                              }`}>
-                                {emp.active === true ? "Active" : "Inactive"}
+                              <span
+                                className={`badge rounded-pill px-3 py-2 fs-6 ${
+                                  emp.active ? "bg-success" : "bg-danger"
+                                }`}
+                              >
+                                {emp.active ? "Active" : "Inactive"}
                               </span>
+                            </td>
+                            <td>
+                              {emp.active ? (
+                                <button
+                                  className="btn btn-sm btn-outline-danger"
+                                  onClick={() =>
+                                    handleStatusChange(emp.employeeId, false)
+                                  }
+                                >
+                                  Deactivate
+                                </button>
+                              ) : (
+                                <button
+                                  className="btn btn-sm btn-outline-success"
+                                  onClick={() =>
+                                    handleStatusChange(emp.employeeId, true)
+                                  }
+                                >
+                                  Activate
+                                </button>
+                              )}
                             </td>
                           </tr>
                         ))}
