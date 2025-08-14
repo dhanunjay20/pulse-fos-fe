@@ -103,7 +103,7 @@ const SetEmployeeDuty = () => {
     };
 
     try {
-      await axios.post("http://localhost:8080/api/staff", payload);
+      await axios.post("https://pulse-766719709317.asia-south1.run.app/api/staff", payload);
       showToast("Duty assigned successfully", "success");
       handleCancel();
     } catch {

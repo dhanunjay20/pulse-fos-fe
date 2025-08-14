@@ -14,7 +14,7 @@ const ViewAllEmployees = () => {
   const fetchEmployees = () => {
     setLoading(true);
     axios
-      .get("http://localhost:8080/employees") // Fetch all employees
+      .get("https://pulse-766719709317.asia-south1.run.app/employees") // Fetch all employees
       .then((res) => {
         const filtered = res.data.filter(
           (emp) => emp.employeeRole?.toUpperCase() === "EMPLOYEE"
@@ -32,7 +32,7 @@ const ViewAllEmployees = () => {
   const handleStatusChange = (employeeId, newStatus) => {
     axios
       .put(
-        `http://localhost:8080/employee/${employeeId}/status?isActive=${newStatus}`
+        `https://pulse-766719709317.asia-south1.run.app/employee/${employeeId}/status?isActive=${newStatus}`
       )
       .then(() => {
         showToast("Status updated successfully", "success");
