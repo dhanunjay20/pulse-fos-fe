@@ -3,6 +3,7 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../../components/ToastProvider";
+import { v4 as uuidv4 } from "uuid";
 import "react-datepicker/dist/react-datepicker.css";
 
 const SalesCollections = () => {
@@ -20,14 +21,14 @@ const SalesCollections = () => {
 
   useEffect(() => {
     axios
-      .get("https://pulse-766719709317.asia-south1.run.app/active")
+      .get("http://localhost:8080/active")
       .then((res) => setEmployees(res.data))
       .catch(() => setEmployeeFetchError("Failed to load employees."));
   }, []);
 
   useEffect(() => {
     axios
-      .get("https://pulse-766719709317.asia-south1.run.app/products")
+      .get("http://localhost:8080/products")
       .then((res) => {
         const activeProducts = res.data.filter(
           (p) => p.status && p.status.toUpperCase() === "ACTIVE"
@@ -97,7 +98,7 @@ const SalesCollections = () => {
 
         try {
           const invRes = await axios.get(
-            "https://pulse-766719709317.asia-south1.run.app/inventory/latest"
+            "http://localhost:8080/inventory/latest"
           );
           const invProduct = invRes.data.find(
             (p) => p.productId === selectedProduct.productId
@@ -126,7 +127,7 @@ const SalesCollections = () => {
     if ((field === "productName" || field === "gun") && row.productName && row.gun) {
       try {
         const res = await axios.get(
-          "https://pulse-766719709317.asia-south1.run.app/sales/last",
+          "http://localhost:8080/sales/last",
           {
             params: { productName: row.productName, gun: row.gun },
           }
@@ -198,7 +199,10 @@ const SalesCollections = () => {
       return;
     }
 
+    const entryId = uuidv4();
+
     const payloadSales = {
+      entryId,
       date: formatDate(entryDate),
       employeeId: parseInt(employeeId),
       products: products.map((p) => ({
@@ -216,6 +220,7 @@ const SalesCollections = () => {
     };
 
     const payloadCollections = {
+      entryId,
       date: formatDate(entryDate),
       employeeId: parseInt(employeeId),
       cashReceived: parseFloat(cashReceived) || 0,
@@ -226,12 +231,13 @@ const SalesCollections = () => {
 
     try {
       await Promise.all([
-        axios.post("https://pulse-766719709317.asia-south1.run.app/sales", payloadSales),
-        axios.post("https://pulse-766719709317.asia-south1.run.app/collections", payloadCollections),
+        axios.post("http://localhost:8080/sales", payloadSales),
+        axios.post("http://localhost:8080/collections", payloadCollections),
       ]);
 
       const inventoryUpdates = products.map((p) =>
-        axios.post("https://pulse-766719709317.asia-south1.run.app/inventory", {
+        axios.post("http://localhost:8080/inventory", {
+          entryId,
           productId: p.productId,
           quantity: -p.salesLiters,
           metric: p.metric || "liters",
