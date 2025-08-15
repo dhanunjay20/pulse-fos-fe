@@ -24,6 +24,7 @@ import ToastProvider from "./Components/ToastProvider";
 import SalesGraph from "./pages/FinanceGraphs/SalesGraph"
 import ViewAllEmployees from "./pages/StaffManagement/ViewAllEmployees";
 import SetEmployeeDuty from "./pages/StaffManagement/SetEmployeeDuty";
+import SalesAndCollections from "./pages/SalesAndCollections/SalesCollectionHistory";
 
 
 
@@ -69,6 +70,7 @@ const App = () => {
           <Route path="staff/view" element={<ViewAllEmployees />} />
           <Route path="staff/set-duty" element={<SetEmployeeDuty />} />
           <Route path="salesgraph" element={<SalesGraph />} />
+          <Route path="salescollectionhistory" element={<SalesAndCollections/>} />
         </Route>
 
         {/* Catch-all route */}

@@ -3,7 +3,6 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../../components/ToastProvider";
-import { v4 as uuidv4 } from "uuid";
 import "react-datepicker/dist/react-datepicker.css";
 
 const SalesCollections = () => {
@@ -49,12 +48,12 @@ const SalesCollections = () => {
         closing: "",
         price: "",
         testing: "",
-        salesLiters: 0,
-        salesRupees: 0,
-        currentLevel: 0,
-        tankCapacity: 0,
-        refillSpace: 0,
-        metric: "liters",
+        salesLiters: "0.00",
+        salesRupees: "0.00",
+        currentLevel: "0.00",
+        tankCapacity: "0.00",
+        refillSpace: "0.00",
+        metric: "Liters (Sale)",
         error: "",
       },
     ]);
@@ -70,19 +69,19 @@ const SalesCollections = () => {
     const testing = parseFloat(row.testing) || 0;
     const price = parseFloat(row.price) || 0;
     let liters = closing - opening - testing;
-    if (liters < 0) liters = 0;
+    liters = Math.max(liters, 0);
 
-    if (liters > row.currentLevel) {
-      row.error = `Sales (${liters.toFixed(2)} L) exceed current tank level (${row.currentLevel} L).`;
-      row.salesLiters = 0;
-      row.salesRupees = 0;
+    if (liters > (parseFloat(row.currentLevel) || 0)) {
+      row.error = `Sales (${liters.toFixed(2)} L) exceed current tank level (${Number(row.currentLevel).toFixed(2)} L).`;
+      row.salesLiters = "0.00";
+      row.salesRupees = "0.00";
       return;
     }
 
     row.error = "";
-    row.salesLiters = liters;
-    row.salesRupees = parseFloat((liters * price).toFixed(2));
-    row.refillSpace = Math.max((row.tankCapacity ?? 0) - (row.currentLevel - liters), 0);
+    row.salesLiters = liters.toFixed(2);
+    row.salesRupees = (liters * price).toFixed(2);
+    row.refillSpace = Math.max((parseFloat(row.tankCapacity) || 0) - ((parseFloat(row.currentLevel) || 0) - liters), 0).toFixed(2);
   };
 
   const handleProductChange = async (index, field, value) => {
@@ -97,42 +96,37 @@ const SalesCollections = () => {
         row.productId = selectedProduct.productId;
 
         try {
-          const invRes = await axios.get(
-            "http://localhost:8080/inventory/latest"
-          );
+          const invRes = await axios.get("http://localhost:8080/inventory/latest");
           const invProduct = invRes.data.find(
             (p) => p.productId === selectedProduct.productId
           );
           if (invProduct) {
-            row.currentLevel = invProduct.currentLevel ?? 0;
-            row.tankCapacity = invProduct.tankCapacity ?? 0;
+            row.currentLevel = Number(invProduct.currentLevel ?? 0).toFixed(2);
+            row.tankCapacity = Number(invProduct.tankCapacity ?? 0).toFixed(2);
             row.refillSpace =
-              (invProduct.tankCapacity ?? 0) - (invProduct.currentLevel ?? 0);
-            row.metric = invProduct.metric || "liters";
+              (Number(invProduct.tankCapacity ?? 0) - Number(invProduct.currentLevel ?? 0)).toFixed(2);
+            row.metric = invProduct.metric || "Liters (Sale)";
           } else {
-            row.currentLevel = 0;
-            row.tankCapacity = 0;
-            row.refillSpace = 0;
-            row.metric = "liters";
+            row.currentLevel = "0.00";
+            row.tankCapacity = "0.00";
+            row.refillSpace = "0.00";
+            row.metric = "Liters (Sale)";
           }
         } catch {
-          row.currentLevel = 0;
-          row.tankCapacity = 0;
-          row.refillSpace = 0;
-          row.metric = "liters";
+          row.currentLevel = "0.00";
+          row.tankCapacity = "0.00";
+          row.refillSpace = "0.00";
+          row.metric = "Liters (Sale)";
         }
       }
     }
 
     if ((field === "productName" || field === "gun") && row.productName && row.gun) {
       try {
-        const res = await axios.get(
-          "http://localhost:8080/sales/last",
-          {
-            params: { productName: row.productName, gun: row.gun },
-          }
-        );
-        row.opening = res.data.lastClosing || 0;
+        const res = await axios.get("http://localhost:8080/sales/last", {
+          params: { productName: row.productName, gun: row.gun },
+        });
+        row.opening = Number(res.data.lastClosing || 0).toFixed(2);
       } catch {
         showToast(`Error fetching last closing for ${row.productName} - ${row.gun}`, "error");
       }
@@ -199,53 +193,38 @@ const SalesCollections = () => {
       return;
     }
 
-    const entryId = uuidv4();
-
-    const payloadSales = {
-      entryId,
-      date: formatDate(entryDate),
-      employeeId: parseInt(employeeId),
-      products: products.map((p) => ({
-        productId: p.productId,
-        productName: p.productName,
-        gun: p.gun,
-        opening: parseFloat(p.opening) || 0,
-        closing: parseFloat(p.closing) || 0,
-        price: parseFloat(p.price) || 0,
-        testing: parseFloat(p.testing) || 0,
-        salesLiters: parseFloat(p.salesLiters) || 0,
-        salesRupees: parseFloat(p.salesRupees) || 0,
-        metric: p.metric || "liters",
-      })),
+    const payload = {
+      entrySaleData: {
+        date: formatDate(entryDate),
+        employeeId: parseInt(employeeId),
+        products: products.map((p) => ({
+          productName: p.productName,
+          gun: p.gun,
+          opening: parseFloat(p.opening) || 0,
+          closing: parseFloat(p.closing) || 0,
+          testing: parseFloat(p.testing) || 0,
+          price: parseFloat(p.price) || 0,
+        })),
+      },
+      entryCollectionData: {
+        date: formatDate(entryDate),
+        employeeId: parseInt(employeeId),
+        cashReceived: parseFloat(cashReceived) || 0,
+        phonePay: parseFloat(phonePay) || 0,
+        creditCard: parseFloat(creditCard) || 0,
+      },
+      inventoryData: {
+        productId: products[0]?.productId || "",
+        quantity: parseFloat(products[0]?.salesLiters) || 0,
+        metric: products[0]?.metric || "Liters (Sale)",
+        employeeId: parseInt(employeeId),
+      },
     };
 
-    const payloadCollections = {
-      entryId,
-      date: formatDate(entryDate),
-      employeeId: parseInt(employeeId),
-      cashReceived: parseFloat(cashReceived) || 0,
-      phonePay: parseFloat(phonePay) || 0,
-      creditCard: parseFloat(creditCard) || 0,
-      shortCollections: parseFloat(shortCollections),
-    };
+    console.log("Submitting payload to /entryData:", payload);
 
     try {
-      await Promise.all([
-        axios.post("http://localhost:8080/sales", payloadSales),
-        axios.post("http://localhost:8080/collections", payloadCollections),
-      ]);
-
-      const inventoryUpdates = products.map((p) =>
-        axios.post("http://localhost:8080/inventory", {
-          entryId,
-          productId: p.productId,
-          quantity: -p.salesLiters,
-          metric: p.metric || "liters",
-          employeeId: parseInt(employeeId),
-        })
-      );
-      await Promise.all(inventoryUpdates);
-
+      await axios.post("http://localhost:8080/entryData", payload);
       showToast("Sales & Collections submitted successfully", "success");
       window.scrollTo({ top: 0, behavior: "smooth" });
       setTimeout(() => window.location.reload(), 3000);
@@ -255,6 +234,7 @@ const SalesCollections = () => {
           "Submission failed. Please check your data and try again.",
         "error"
       );
+      console.error("Backend error:", err?.response?.data);
     } finally {
       setLoading(false);
     }
@@ -321,7 +301,6 @@ const SalesCollections = () => {
                     </div>
                   </div>
 
-                  {/* Sales Section */}
                   <h4 className="text-secondary mt-4 mb-3">Sales</h4>
                   {products.map((p, i) => (
                     <div className="row border rounded p-3 mb-4" key={i}>
@@ -361,6 +340,7 @@ const SalesCollections = () => {
                           ) : (
                             <input
                               type="number"
+                              step="0.01"
                               className={`form-control form-control-lg ${
                                 field === "closing" && p.error ? "is-invalid" : ""
                               }`}
@@ -395,7 +375,6 @@ const SalesCollections = () => {
                     </button>
                   </div>
 
-                  {/* Collections Section */}
                   <h4 className="text-secondary mb-3">Collections</h4>
                   <div className="row">
                     {[
@@ -409,13 +388,14 @@ const SalesCollections = () => {
                         <label>{label}</label>
                         <input
                           type="number"
+                          step="0.01"
                           className={`form-control form-control-lg ${
                             label === "Short Collections" &&
                             parseFloat(shortCollections) < -10
                               ? "is-invalid"
                               : ""
                           }`}
-                          value={value}
+                          value={readOnly ? Number(value).toFixed(2) : value}
                           onChange={(e) => setter?.(e.target.value)}
                           readOnly={readOnly}
                         />
@@ -429,7 +409,6 @@ const SalesCollections = () => {
                     ))}
                   </div>
 
-                  {/* Action Buttons */}
                   <div className="mt-4 d-flex justify-content-end gap-2">
                     <button
                       type="button"

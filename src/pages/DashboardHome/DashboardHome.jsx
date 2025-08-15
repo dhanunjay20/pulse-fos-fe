@@ -50,7 +50,7 @@ const cards = [
     description: 'Update your account details and customize application settings.',
     buttonText: 'Edit Settings',
     icon: 'bi-gear',
-    path: '/dashboard/settings',
+    path: '/dashboard/salescollectionhistory',
   },
   {
     title: 'Expenses',
