@@ -38,8 +38,8 @@ const DashboardLayout = () => {
       </div>
 
       <main
-        className="flex-grow-1 container-fluid p-3"
-        style={{ paddingTop: `${navHeight}px` }}
+        className="flex-grow-1 container-fluid"
+        style={{ paddingTop: '70px' }}
       >
         <Outlet />
       </main>
