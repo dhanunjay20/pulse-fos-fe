@@ -38,7 +38,6 @@ const SalesCollectionHistory = () => {
     }
   };
 
-  // Find the entry with the latest date
   const latestEntryIdx = entries.reduce((latestIdx, entry, idx, arr) => {
     const date = new Date(entry?.entryData?.entrySaleData?.date ?? 0);
     const latestDate = new Date(arr[latestIdx]?.entryData?.entrySaleData?.date ?? 0);
@@ -68,9 +67,12 @@ const SalesCollectionHistory = () => {
                           <th>Gun</th>
                           <th>Opening</th>
                           <th>Closing</th>
+                          <th>Sale In Rupees</th>
+                          <th>Sale In Liters</th>
                           <th>Cash Received</th>
                           <th>Phone Pay</th>
                           <th>Credit Card</th>
+                          <th>Short Collections</th>
                           <th>Employee ID</th>
                           <th>Actions</th>
                         </tr>
@@ -86,9 +88,12 @@ const SalesCollectionHistory = () => {
                               <td>{p.gun ?? ""}</td>
                               <td>{p.opening !== undefined ? Number(p.opening).toFixed(2) : ""}</td>
                               <td>{p.closing !== undefined ? Number(p.closing).toFixed(2) : ""}</td>
+                              <td>{p.saleInRupees !== undefined ? Number(p.saleInRupees).toFixed(2) : ""}</td>
+                              <td>{p.saleInLiters !== undefined ? Number(p.saleInLiters).toFixed(2) : ""}</td>
                               <td>{collection.cashReceived !== undefined ? Number(collection.cashReceived).toFixed(2) : ""}</td>
                               <td>{collection.phonePay !== undefined ? Number(collection.phonePay).toFixed(2) : ""}</td>
                               <td>{collection.creditCard !== undefined ? Number(collection.creditCard).toFixed(2) : ""}</td>
+                              <td>{collection.shortCollections !== undefined ? Number(collection.shortCollections).toFixed(2) : ""}</td>
                               <td>{sale.employeeId ?? ""}</td>
                               <td>
                                 {idx === latestEntryIdx && i === products.length - 1 && (
@@ -105,7 +110,7 @@ const SalesCollectionHistory = () => {
                         })}
                         {entries.length === 0 && (
                           <tr>
-                            <td colSpan={9} className="text-center">No entries found.</td>
+                            <td colSpan={12} className="text-center">No entries found.</td>
                           </tr>
                         )}
                       </tbody>
