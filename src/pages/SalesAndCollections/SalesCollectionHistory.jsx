@@ -40,8 +40,8 @@ const SalesCollectionHistory = () => {
 
   // Find the entry with the latest date
   const latestEntryIdx = entries.reduce((latestIdx, entry, idx, arr) => {
-    const date = new Date(entry?.entrySaleData?.date ?? 0);
-    const latestDate = new Date(arr[latestIdx]?.entrySaleData?.date ?? 0);
+    const date = new Date(entry?.entryData?.entrySaleData?.date ?? 0);
+    const latestDate = new Date(arr[latestIdx]?.entryData?.entrySaleData?.date ?? 0);
     return date > latestDate ? idx : latestIdx;
   }, 0);
 
@@ -77,8 +77,8 @@ const SalesCollectionHistory = () => {
                       </thead>
                       <tbody>
                         {entries.map((entry, idx) => {
-                          const sale = entry.entrySaleData ?? {};
-                          const collection = entry.entryCollectionData ?? {};
+                          const sale = entry.entryData?.entrySaleData ?? {};
+                          const collection = entry.entryData?.entryCollectionData ?? {};
                           const products = Array.isArray(sale.products) ? sale.products : [];
                           return products.map((p, i) => (
                             <tr key={`${entry.entryId}-${p.productName}-${p.gun}-${i}`}>
