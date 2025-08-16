@@ -20,14 +20,14 @@ const SalesCollections = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/active")
+      .get("https://pulse-766719709317.asia-south1.run.app/active")
       .then((res) => setEmployees(res.data))
       .catch(() => setEmployeeFetchError("Failed to load employees."));
   }, []);
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/products")
+      .get("https://pulse-766719709317.asia-south1.run.app/products")
       .then((res) => {
         const activeProducts = res.data.filter(
           (p) => p.status && p.status.toUpperCase() === "ACTIVE"
@@ -96,7 +96,7 @@ const SalesCollections = () => {
         row.productId = selectedProduct.productId;
 
         try {
-          const invRes = await axios.get("http://localhost:8080/inventory/latest");
+          const invRes = await axios.get("https://pulse-766719709317.asia-south1.run.app/inventory/latest");
           const invProduct = invRes.data.find(
             (p) => p.productId === selectedProduct.productId
           );
@@ -123,7 +123,7 @@ const SalesCollections = () => {
 
     if ((field === "productName" || field === "gun") && row.productName && row.gun) {
       try {
-        const res = await axios.get("http://localhost:8080/sales/last", {
+        const res = await axios.get("https://pulse-766719709317.asia-south1.run.app/sales/last", {
           params: { productName: row.productName, gun: row.gun },
         });
         row.opening = Number(res.data.lastClosing || 0).toFixed(2);
@@ -224,7 +224,7 @@ const SalesCollections = () => {
     console.log("Submitting payload to /entryData:", payload);
 
     try {
-      await axios.post("http://localhost:8080/entryData", payload);
+      await axios.post("https://pulse-766719709317.asia-south1.run.app/entryData", payload);
       showToast("Sales & Collections submitted successfully", "success");
       window.scrollTo({ top: 0, behavior: "smooth" });
       setTimeout(() => window.location.reload(), 3000);
