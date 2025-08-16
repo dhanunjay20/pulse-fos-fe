@@ -20,6 +20,7 @@ const SalesCollectionHistory = () => {
       .then((res) => {
         setEntries(res.data || []);
         setLoading(false);
+        console.log(res.data);
       })
       .catch(() => {
         showToast("Failed to load recent entries.", "error");
@@ -88,7 +89,7 @@ const SalesCollectionHistory = () => {
                               <td>{p.gun ?? ""}</td>
                               <td>{p.opening !== undefined ? Number(p.opening).toFixed(2) : ""}</td>
                               <td>{p.closing !== undefined ? Number(p.closing).toFixed(2) : ""}</td>
-                              <td>{p.saleInRupees !== undefined ? Number(p.saleInRupees).toFixed(2) : ""}</td>
+                              <td>{p.salesInRupees !== undefined ? Number(p.salesInRupees).toFixed(2) : ""}</td>
                               <td>{p.saleInLiters !== undefined ? Number(p.saleInLiters).toFixed(2) : ""}</td>
                               <td>{collection.cashReceived !== undefined ? Number(collection.cashReceived).toFixed(2) : ""}</td>
                               <td>{collection.phonePay !== undefined ? Number(collection.phonePay).toFixed(2) : ""}</td>
