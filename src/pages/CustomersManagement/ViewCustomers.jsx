@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { showToast } from "../../components/ToastProvider";
 
 const ViewCustomers = () => {
@@ -12,6 +13,8 @@ const ViewCustomers = () => {
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [transactions, setTransactions] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBorrowers = async () => {
@@ -113,7 +116,7 @@ const ViewCustomers = () => {
               <div className="card inventory-card shadow-lg border-0">
                 <div className="card-header bg-gradient-primary text-white d-flex align-items-center justify-content-between">
                   <h3 className="mb-0 fw-bold">
-                    <span role="img" aria-label="user">👥</span> All Borrowers
+                    <span role="img" aria-label="user">👥</span> Customers
                   </h3>
                   <span className="badge bg-light text-primary fs-6">
                     {borrowers.length} Customers
@@ -128,6 +131,12 @@ const ViewCustomers = () => {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
+                    <button
+                      className="btn btn-primary mt-2"
+                      onClick={() => navigate("/dashboard/customers/add")}
+                    >
+                      Add Customer
+                    </button>
                   </div>
                   {loading ? (
                     <div className="d-flex flex-column align-items-center py-5">

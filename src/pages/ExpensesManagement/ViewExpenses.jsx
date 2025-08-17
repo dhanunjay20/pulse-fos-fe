@@ -4,7 +4,6 @@ import { FaEdit, FaTrashAlt, FaFileAlt } from "react-icons/fa";
 import axios from "axios";
 import { showToast } from "../../components/ToastProvider";
 
-
 const ViewExpenses = () => {
   const [expenses, setExpenses] = useState([]);
   const [filteredExpenses, setFilteredExpenses] = useState([]);
@@ -105,6 +104,21 @@ const ViewExpenses = () => {
                   </div>
                 </div>
                 <div className="card-body p-4">
+                  {/* Add Expense and Add Category Buttons */}
+                  <div className="mb-3 d-flex flex-column flex-sm-row gap-2">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => navigate("/dashboard/expenses/add")}
+                    >
+                      Add Expense
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => navigate("/dashboard/expenses/add-category")}
+                    >
+                      Add Category
+                    </button>
+                  </div>
                   {/* Filters */}
                   <div className="row g-3 mb-3">
                     <div className="col-md-4">

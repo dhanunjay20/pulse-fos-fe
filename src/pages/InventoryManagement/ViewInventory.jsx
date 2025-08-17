@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { showToast } from "../../components/ToastProvider";
+import { useNavigate } from "react-router-dom";
 
 const ViewInventory = () => {
   const [inventoryData, setInventoryData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -37,6 +39,15 @@ const ViewInventory = () => {
                   </span>
                 </div>
                 <div className="card-body p-4">
+                  {/* Update Inventory Button */}
+                  <div className="mb-3">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => navigate("/dashboard/inventory/update")}
+                    >
+                      Update Inventory
+                    </button>
+                  </div>
                   {loading ? (
                     <div className="d-flex flex-column align-items-center py-5">
                       <div className="spinner-border text-primary mb-3" role="status"></div>

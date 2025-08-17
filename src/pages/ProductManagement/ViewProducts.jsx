@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { showToast } from "../../components/ToastProvider";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "animate.css/animate.min.css";
 
@@ -9,6 +10,7 @@ const ViewProducts = () => {
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [newStatus, setNewStatus] = useState("");
+  const navigate = useNavigate();
 
   const fetchProducts = async () => {
     try {
@@ -100,6 +102,21 @@ const ViewProducts = () => {
                   </span>
                 </div>
                 <div className="card-body p-4">
+                  {/* Add Product and Update Price Buttons */}
+                  <div className="mb-3 d-flex flex-column flex-sm-row gap-2">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => navigate("/dashboard/products/add")}
+                    >
+                      Add Product
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => navigate("/dashboard/products/price")}
+                    >
+                      Update Price
+                    </button>
+                  </div>
                   {loading ? (
                     <div className="d-flex flex-column align-items-center py-5">
                       <div className="spinner-border text-primary mb-3" role="status"></div>

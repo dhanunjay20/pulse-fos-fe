@@ -20,7 +20,13 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import ManagerDashboard from "./pages/Dashboards/ManagerDashboard";
 import OwnerDashboard from "./pages/Dashboards/OwnerDashboard";
 import EmployeeDashboard from "./pages/Dashboards/EmployeeDashboard";
-import ToastProvider from "./components/ToastProvider";
+import ToastProvider from "./Components/ToastProvider";
+import SalesGraph from "./pages/FinanceGraphs/SalesGraph"
+import ViewAllEmployees from "./pages/StaffManagement/ViewAllEmployees";
+import SetEmployeeDuty from "./pages/StaffManagement/SetEmployeeDuty";
+import SalesAndCollections from "./pages/SalesAndCollections/SalesCollectionHistory";
+
+
 
 const App = () => {
   return (
@@ -61,6 +67,10 @@ const App = () => {
           <Route path="documents/upload" element={<UploadDocument />} />
           <Route path="customers/view" element={<ViewCustomers />} />
           <Route path="customers/add" element={<AddNewCustomer />} />
+          <Route path="staff/view" element={<ViewAllEmployees />} />
+          <Route path="staff/set-duty" element={<SetEmployeeDuty />} />
+          <Route path="salesgraph" element={<SalesGraph />} />
+          <Route path="salescollectionhistory" element={<SalesAndCollections/>} />
         </Route>
 
         {/* Catch-all route */}
