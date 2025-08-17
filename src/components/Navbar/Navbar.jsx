@@ -90,11 +90,23 @@ const Navbar = ({ hideNavbar, onLogout }) => {
                   <li><NavLink className="dropdown-item" to="/dashboard/products/price" onClick={handleNavLinkClick}><i className="bi bi-currency-dollar me-1"></i>Update Price</NavLink></li>
                 </ul>
               </li>
-              {/* Sales & Collections */}
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
-                  <i className="bi bi-cash-coin me-1"></i>Sales data
-                </NavLink>
+
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i className="bi bi-cash-coin me-1"></i>Sales & Collections
+                </a>
+                <ul className="dropdown-menu">
+                  <li>
+                    <NavLink className="dropdown-item" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
+                      <i className="bi bi-cash-stack me-1"></i>Sales Data
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/dashboard/salescollectionhistory" onClick={handleNavLinkClick}>
+                      <i className="bi bi-clock-history me-1"></i>Sales History
+                    </NavLink>
+                  </li>
+                </ul>
               </li>
               {/* Customers */}
               <li className="nav-item dropdown">
@@ -133,11 +145,23 @@ const Navbar = ({ hideNavbar, onLogout }) => {
           {/* Manager: Main navs and subnavs */}
           {role === 'manager' && (
             <>
-              {/* Sales Data */}
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
+              {/* Sales Data with Sales History subnav */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                   <i className="bi bi-cash-coin me-1"></i>Sales Data
-                </NavLink>
+                </a>
+                <ul className="dropdown-menu">
+                  <li>
+                    <NavLink className="dropdown-item" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
+                      <i className="bi bi-cash-stack me-1"></i>Sales Data
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/dashboard/salescollectionhistory" onClick={handleNavLinkClick}>
+                      <i className="bi bi-clock-history me-1"></i>Sales History
+                    </NavLink>
+                  </li>
+                </ul>
               </li>
               {/* Manage Inventory */}
               <li className="nav-item dropdown">
@@ -204,7 +228,6 @@ const Navbar = ({ hideNavbar, onLogout }) => {
             </>
           )}
 
-          {/* Employee: Only Sales & Collections */}
           {role === 'employee' && (
             <li className="nav-item">
               <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
@@ -214,7 +237,7 @@ const Navbar = ({ hideNavbar, onLogout }) => {
           )}
         </ul>
 
-        {/* Right side: employee and logout, Home only for owner */}
+
         <div className="d-flex align-items-center text-white gap-3">
           <span>{employee.name} (ID: {employee.id})</span>
           {role === 'owner' && (

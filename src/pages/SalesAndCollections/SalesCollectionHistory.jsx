@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { showToast } from "../../components/ToastProvider";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = "https://pulse-766719709317.asia-south1.run.app/recent-entries";
 const DELETE_URL = "https://pulse-766719709317.asia-south1.run.app/entry";
@@ -8,6 +9,8 @@ const DELETE_URL = "https://pulse-766719709317.asia-south1.run.app/entry";
 const SalesCollectionHistory = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(10);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchEntries();
@@ -20,7 +23,6 @@ const SalesCollectionHistory = () => {
       .then((res) => {
         setEntries(res.data || []);
         setLoading(false);
-        console.log(res.data);
       })
       .catch(() => {
         showToast("Failed to load recent entries.", "error");
@@ -45,16 +47,24 @@ const SalesCollectionHistory = () => {
     return date > latestDate ? idx : latestIdx;
   }, 0);
 
+  const paginatedEntries = entries.slice(0, visibleCount);
+
   return (
     <div className="inventory-bg">
       <div className="container inventory-container py-5">
         <div className="row justify-content-center">
           <div className="col-12">
             <div className="card inventory-card shadow-lg border-0">
-              <div className="card-header bg-gradient-primary text-white">
+              <div className="card-header bg-gradient-primary text-white d-flex align-items-center justify-content-between">
                 <h3 className="mb-0 fw-bold">
                   <span role="img" aria-label="history">📜</span> Recent Sales & Collections
                 </h3>
+                <button
+                  className="btn btn-success"
+                  onClick={() => navigate("/dashboard/salescollections")}
+                >
+                  Add Sale
+                </button>
               </div>
               <div className="card-body p-4">
                 {loading ? (
@@ -64,6 +74,7 @@ const SalesCollectionHistory = () => {
                     <table className="table table-bordered">
                       <thead>
                         <tr>
+                          <th>Date</th>
                           <th>Product Name</th>
                           <th>Gun</th>
                           <th>Opening</th>
@@ -79,12 +90,17 @@ const SalesCollectionHistory = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {entries.map((entry, idx) => {
+                        {paginatedEntries.map((entry, idx) => {
                           const sale = entry.entryData?.entrySaleData ?? {};
                           const collection = entry.entryData?.entryCollectionData ?? {};
                           const products = Array.isArray(sale.products) ? sale.products : [];
                           return products.map((p, i) => (
                             <tr key={`${entry.entryId}-${p.productName}-${p.gun}-${i}`}>
+                              <td>
+                                {sale.date
+                                  ? new Date(sale.date).toLocaleDateString()
+                                  : ""}
+                              </td>
                               <td>{p.productName ?? ""}</td>
                               <td>{p.gun ?? ""}</td>
                               <td>{p.opening !== undefined ? Number(p.opening).toFixed(2) : ""}</td>
@@ -111,11 +127,29 @@ const SalesCollectionHistory = () => {
                         })}
                         {entries.length === 0 && (
                           <tr>
-                            <td colSpan={12} className="text-center">No entries found.</td>
+                            <td colSpan={13} className="text-center">No entries found.</td>
                           </tr>
                         )}
                       </tbody>
                     </table>
+                    <div className="d-flex justify-content-center gap-2 mt-3">
+                      {visibleCount < entries.length && (
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => setVisibleCount((prev) => prev + 20)}
+                        >
+                          Show More
+                        </button>
+                      )}
+                      {visibleCount > 10 && (
+                        <button
+                          className="btn btn-secondary"
+                          onClick={() => setVisibleCount((prev) => Math.max(10, prev - 20))}
+                        >
+                          Show Less
+                        </button>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
