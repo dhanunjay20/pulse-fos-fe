@@ -17,7 +17,7 @@ const ViewDocuments = () => {
   const fetchDocuments = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("https://pulse-766719709317.asia-south1.run.app/api/documents");
+      const res = await axios.get("https://pulse-620964158368.asia-south2.run.app/api/documents");
       setDocuments(res.data || []);
     } catch (err) {
       setError("Failed to load documents.");
@@ -31,7 +31,7 @@ const ViewDocuments = () => {
     const blobName = fileUrl.split("/").pop();
     try {
       const response = await axios.get(
-        `https://pulse-766719709317.asia-south1.run.app/api/documents/${blobName}`
+        `https://pulse-620964158368.asia-south2.run.app/api/documents/${blobName}`
       );
       const signedUrl = response.data;
       window.open(signedUrl, "_blank");

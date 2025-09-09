@@ -41,7 +41,7 @@ const AddProduct = () => {
     }
     setLoading(true);
     try {
-      await axios.post('https://pulse-766719709317.asia-south1.run.app/products', formData);
+      await axios.post('https://pulse-620964158368.asia-south2.run.app/products', formData);
       showToast('Product added successfully!', 'success');
       setTimeout(() => navigate('/dashboard/products/view'), 2000);
     } catch (err) {

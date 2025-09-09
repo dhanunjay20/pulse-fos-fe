@@ -22,7 +22,7 @@ const ViewCustomers = () => {
         setLoading(true);
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          "https://pulse-766719709317.asia-south1.run.app/borrowers",
+          "https://pulse-620964158368.asia-south2.run.app/borrowers",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setBorrowers(res.data);
@@ -71,7 +71,7 @@ const ViewCustomers = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `https://pulse-766719709317.asia-south1.run.app/borrowers/${id}/update`,
+        `https://pulse-620964158368.asia-south2.run.app/borrowers/${id}/update`,
         {
           duePaid: parseFloat(duePaid) || 0,
           extraBorrowed: parseFloat(extraBorrowed) || 0,
@@ -97,7 +97,7 @@ const ViewCustomers = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        `https://pulse-766719709317.asia-south1.run.app/borrowers/${borrower.id}/transactions`,
+        `https://pulse-620964158368.asia-south2.run.app/borrowers/${borrower.id}/transactions`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setTransactions(res.data);

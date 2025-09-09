@@ -11,7 +11,7 @@ const ViewInventory = () => {
 
   useEffect(() => {
     axios
-      .get("https://pulse-766719709317.asia-south1.run.app/inventory/latest")
+      .get("https://pulse-620964158368.asia-south2.run.app/inventory/latest")
       .then((res) => {
         setInventoryData(res.data);
         setLoading(false);

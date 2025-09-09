@@ -3,8 +3,8 @@ import axios from "axios";
 import { showToast } from "../../components/ToastProvider";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "https://pulse-766719709317.asia-south1.run.app/recent-entries";
-const DELETE_URL = "https://pulse-766719709317.asia-south1.run.app/entry";
+const API_URL = "https://pulse-620964158368.asia-south2.run.app/recent-entries";
+const DELETE_URL = "https://pulse-620964158368.asia-south2.run.app/entry";
 
 const SalesCollectionHistory = () => {
   const [entries, setEntries] = useState([]);

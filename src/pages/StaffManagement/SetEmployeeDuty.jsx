@@ -24,7 +24,7 @@ const SetEmployeeDuty = () => {
 
   useEffect(() => {
     axios
-      .get("https://pulse-766719709317.asia-south1.run.app/active")
+      .get("https://pulse-620964158368.asia-south2.run.app/active")
       .then((res) => {
         const filtered = res.data.filter(
           (emp) =>
@@ -103,7 +103,7 @@ const SetEmployeeDuty = () => {
     };
 
     try {
-      await axios.post("https://pulse-766719709317.asia-south1.run.app/api/staff", payload);
+      await axios.post("https://pulse-620964158368.asia-south2.run.app/api/staff", payload);
       showToast("Duty assigned successfully", "success");
       handleCancel();
     } catch {

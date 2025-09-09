@@ -49,7 +49,7 @@ const AddNewCustomer = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'https://pulse-766719709317.asia-south1.run.app/borrowers',
+        'https://pulse-620964158368.asia-south2.run.app/borrowers',
         {
           ...form,
           amountBorrowed: parseFloat(form.amountBorrowed) || 0,

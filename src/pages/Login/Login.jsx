@@ -32,7 +32,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        "https://pulse-766719709317.asia-south1.run.app/login",
+        "https://pulse-620964158368.asia-south2.run.app/login",
         { username, password }
       );
 

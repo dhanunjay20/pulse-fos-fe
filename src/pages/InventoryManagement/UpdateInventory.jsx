@@ -23,11 +23,11 @@ const UpdateInventory = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('https://pulse-766719709317.asia-south1.run.app/inventory/latest')
+    axios.get('https://pulse-620964158368.asia-south2.run.app/inventory/latest')
       .then((res) => setProducts(Array.isArray(res.data) ? res.data : []))
       .catch(() => showToast('Failed to load products.', 'error'));
 
-    axios.get('https://pulse-766719709317.asia-south1.run.app/active')
+    axios.get('https://pulse-620964158368.asia-south2.run.app/active')
       .then((res) => setEmployees(Array.isArray(res.data) ? res.data : []))
       .catch(() => showToast('Failed to load employees.', 'error'));
   }, []);
@@ -118,7 +118,7 @@ const UpdateInventory = () => {
       employeeId: Number(employeeId)
     };
 
-    axios.post('https://pulse-766719709317.asia-south1.run.app/inventory', payload)
+    axios.post('https://pulse-620964158368.asia-south2.run.app/inventory', payload)
       .then((res) => {
         if (res.status === 201 || res.status === 200) {
           showToast('Entry added successfully!', 'success');

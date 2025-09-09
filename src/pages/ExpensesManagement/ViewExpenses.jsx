@@ -32,7 +32,7 @@ const ViewExpenses = () => {
   const fetchExpenses = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("https://pulse-766719709317.asia-south1.run.app/expensesList");
+      const response = await axios.get("https://pulse-620964158368.asia-south2.run.app/expensesList");
       const data = response.data || [];
       const now = new Date();
       const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -67,7 +67,7 @@ const ViewExpenses = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this expense?")) return;
     try {
-      await axios.delete(`https://pulse-766719709317.asia-south1.run.app/categoryDelete/${id}`);
+      await axios.delete(`https://pulse-620964158368.asia-south2.run.app/categoryDelete/${id}`);
       setExpenses((prev) => prev.filter((e) => e._id !== id && e.id !== id));
       showToast("Expense deleted successfully.", "success");
     } catch (err) {

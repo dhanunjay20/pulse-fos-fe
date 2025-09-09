@@ -18,7 +18,7 @@ const AddCategory = () => {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('https://pulse-766719709317.asia-south1.run.app/categoryList');
+      const response = await axios.get('https://pulse-620964158368.asia-south2.run.app/categoryList');
       setCategories(response.data || []);
     } catch {
       showToast('Failed to fetch categories.', 'error');
@@ -31,7 +31,7 @@ const AddCategory = () => {
     e.preventDefault();
     if (!categoryName.trim()) return;
     try {
-      await axios.post('https://pulse-766719709317.asia-south1.run.app/categoryPost', { name: categoryName });
+      await axios.post('https://pulse-620964158368.asia-south2.run.app/categoryPost', { name: categoryName });
       setCategoryName('');
       showToast('Category added successfully!', 'success');
       fetchCategories();
@@ -43,7 +43,7 @@ const AddCategory = () => {
   const handleDeleteCategory = async (id, name) => {
     if (!window.confirm(`Delete category "${name}"?`)) return;
     try {
-      await axios.delete(`https://pulse-766719709317.asia-south1.run.app/categoryDelete/${id}`);
+      await axios.delete(`https://pulse-620964158368.asia-south2.run.app/categoryDelete/${id}`);
       showToast('Category deleted.', 'success');
       fetchCategories();
     } catch {
