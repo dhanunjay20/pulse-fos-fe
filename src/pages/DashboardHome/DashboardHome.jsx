@@ -29,7 +29,7 @@ const cards = [
     description: 'Oversee employee schedules, roles, and performance metrics.',
     buttonText: 'View Staff',
     icon: 'bi-people',
-    path: '/dashboard/employee',
+    path: '/dashboard/staff/view',
   },
   {
     title: 'Customers',
@@ -43,14 +43,14 @@ const cards = [
     description: 'Track expenses, income, and ensure financial control.',
     buttonText: 'View Finance',
     icon: 'bi-bar-chart-line',
-    path: '/dashboard/customers',
+    path: '/dashboard/salesgraph',
   },
   {
     title: 'Settings & Profile',
     description: 'Update your account details and customize application settings.',
     buttonText: 'Edit Settings',
     icon: 'bi-gear',
-    path: '/dashboard/settings',
+    path: '/dashboard/salescollectionhistory',
   },
   {
     title: 'Expenses',

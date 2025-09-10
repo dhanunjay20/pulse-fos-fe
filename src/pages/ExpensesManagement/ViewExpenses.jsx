@@ -4,7 +4,6 @@ import { FaEdit, FaTrashAlt, FaFileAlt } from "react-icons/fa";
 import axios from "axios";
 import { showToast } from "../../components/ToastProvider";
 
-
 const ViewExpenses = () => {
   const [expenses, setExpenses] = useState([]);
   const [filteredExpenses, setFilteredExpenses] = useState([]);
@@ -33,7 +32,7 @@ const ViewExpenses = () => {
   const fetchExpenses = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("https://pulse-766719709317.asia-south1.run.app/expensesList");
+      const response = await axios.get("https://pulse-620964158368.asia-south2.run.app/expensesList");
       const data = response.data || [];
       const now = new Date();
       const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -68,7 +67,7 @@ const ViewExpenses = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this expense?")) return;
     try {
-      await axios.delete(`https://pulse-766719709317.asia-south1.run.app/categoryDelete/${id}`);
+      await axios.delete(`https://pulse-620964158368.asia-south2.run.app/categoryDelete/${id}`);
       setExpenses((prev) => prev.filter((e) => e._id !== id && e.id !== id));
       showToast("Expense deleted successfully.", "success");
     } catch (err) {
@@ -105,6 +104,21 @@ const ViewExpenses = () => {
                   </div>
                 </div>
                 <div className="card-body p-4">
+                  {/* Add Expense and Add Category Buttons */}
+                  <div className="mb-3 d-flex flex-column flex-sm-row gap-2">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => navigate("/dashboard/expenses/add")}
+                    >
+                      Add Expense
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => navigate("/dashboard/expenses/add-category")}
+                    >
+                      Add Category
+                    </button>
+                  </div>
                   {/* Filters */}
                   <div className="row g-3 mb-3">
                     <div className="col-md-4">

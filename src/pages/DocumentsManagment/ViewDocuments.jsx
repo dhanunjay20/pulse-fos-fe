@@ -1,39 +1,47 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaFileAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { showToast } from '../../components/ToastProvider';
 
 const ViewDocuments = () => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        const res = await axios.get("https://pulse-766719709317.asia-south1.run.app/api/documents");
-        setDocuments(res.data || []);
-      } catch (err) {
-        setError("Failed to load documents.");
-        showToast("Failed to load documents.", "error");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchDocuments();
   }, []);
+
+  const fetchDocuments = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get("https://pulse-620964158368.asia-south2.run.app/api/documents");
+      setDocuments(res.data || []);
+    } catch (err) {
+      setError("Failed to load documents.");
+      showToast("Failed to load documents.", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleViewDocument = async (fileUrl) => {
     const blobName = fileUrl.split("/").pop();
     try {
       const response = await axios.get(
-        `https://pulse-766719709317.asia-south1.run.app/api/documents/${blobName}`
+        `https://pulse-620964158368.asia-south2.run.app/api/documents/${blobName}`
       );
       const signedUrl = response.data;
       window.open(signedUrl, "_blank");
     } catch (error) {
       showToast("Failed to open document.", "error");
     }
+  };
+
+  const handleUploadClick = () => {
+    navigate("/dashboard/documents/upload");
   };
 
   return (
@@ -52,6 +60,14 @@ const ViewDocuments = () => {
                   </span>
                 </div>
                 <div className="card-body p-4">
+                  <div className="mb-3 d-flex flex-column flex-sm-row gap-2">
+                    <button
+                      className="btn btn-primary"
+                      onClick={handleUploadClick}
+                    >
+                      Upload Document
+                    </button>
+                  </div>
                   {loading ? (
                     <div className="text-center text-secondary">Loading documents...</div>
                   ) : error ? (

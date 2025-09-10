@@ -1,9 +1,9 @@
-import ViewExpenses from '../ExpensesManagement/ViewExpenses'
+import SaleCollections from '../SalesAndCollections/SalesCollections'
 
 const ManagerDashboard = () => {
   return (
     <div>
-      <ViewExpenses/>
+      <SaleCollections/>
     </div>
   )
 }

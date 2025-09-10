@@ -24,7 +24,7 @@ const AddNewExpense = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get('https://pulse-766719709317.asia-south1.run.app/categoryList');
+      const res = await axios.get('https://pulse-620964158368.asia-south2.run.app/categoryList');
       setCategories(res.data || []);
     } catch {
       showToast('Failed to fetch categories.', 'error');
@@ -33,7 +33,7 @@ const AddNewExpense = () => {
 
   const fetchEmployeeIds = async () => {
     try {
-      const res = await axios.get('https://pulse-766719709317.asia-south1.run.app/active');
+      const res = await axios.get('https://pulse-620964158368.asia-south2.run.app/active');
       setEmployeeIds(res.data || []);
     } catch {
       showToast('Failed to fetch employee list.', 'error');
@@ -61,7 +61,7 @@ const AddNewExpense = () => {
         employeeId: form.employeeId
       };
 
-      await axios.post('https://pulse-766719709317.asia-south1.run.app/expensesPost', payload);
+      await axios.post('https://pulse-620964158368.asia-south2.run.app/expensesPost', payload);
       showToast('Expense added successfully.', 'success');
 
       setForm({
@@ -89,7 +89,7 @@ const AddNewExpense = () => {
             <div className="card inventory-card shadow-lg border-0">
               <div className="card-header bg-gradient-primary text-white d-flex align-items-center justify-content-between">
                 <h3 className="mb-0 fw-bold">
-                  <span role="img" aria-label="expense">💸</span> Add New Expense
+                  <span role="img" aria-label="expense">💸</span> Add Expense
                 </h3>
                 <button
                   className="btn btn-light btn-sm"

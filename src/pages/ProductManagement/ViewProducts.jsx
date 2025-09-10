@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { showToast } from "../../components/ToastProvider";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "animate.css/animate.min.css";
 
@@ -9,10 +10,11 @@ const ViewProducts = () => {
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [newStatus, setNewStatus] = useState("");
+  const navigate = useNavigate();
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("https://pulse-766719709317.asia-south1.run.app/products");
+      const res = await axios.get("https://pulse-620964158368.asia-south2.run.app/products");
       setProducts(res.data);
     } catch (err) {
       showToast("Failed to load products: " + err.message, "error");
@@ -28,7 +30,7 @@ const ViewProducts = () => {
   const handleDelete = async (productId) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
-      await axios.delete(`https://pulse-766719709317.asia-south1.run.app/products/${productId}`);
+      await axios.delete(`https://pulse-620964158368.asia-south2.run.app/products/${productId}`);
       setProducts((prev) => prev.filter((p) => (p.productId ?? p.id) !== productId));
       showToast("Product deleted successfully.", "success");
     } catch (err) {
@@ -52,7 +54,7 @@ const ViewProducts = () => {
       if (!product) return;
 
       const updatedProduct = { ...product, status: "INACTIVE" };
-      await axios.put(`https://pulse-766719709317.asia-south1.run.app/products/${productId}`, updatedProduct);
+      await axios.put(`https://pulse-620964158368.asia-south2.run.app/products/${productId}`, updatedProduct);
 
       setProducts((prev) =>
         prev.map((p) => (p.productId ?? p.id) === productId ? updatedProduct : p)
@@ -73,7 +75,7 @@ const ViewProducts = () => {
     try {
       const updatedProduct = { ...selectedProduct, status: newStatus };
       const productId = selectedProduct.productId ?? selectedProduct.id;
-      await axios.put(`https://pulse-766719709317.asia-south1.run.app/products/${productId}`, updatedProduct);
+      await axios.put(`https://pulse-620964158368.asia-south2.run.app/products/${productId}`, updatedProduct);
       setProducts((prev) =>
         prev.map((p) => (p.productId ?? p.id) === productId ? updatedProduct : p)
       );
@@ -100,6 +102,21 @@ const ViewProducts = () => {
                   </span>
                 </div>
                 <div className="card-body p-4">
+                  {/* Add Product and Update Price Buttons */}
+                  <div className="mb-3 d-flex flex-column flex-sm-row gap-2">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => navigate("/dashboard/products/add")}
+                    >
+                      Add Product
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => navigate("/dashboard/products/price")}
+                    >
+                      Update Price
+                    </button>
+                  </div>
                   {loading ? (
                     <div className="d-flex flex-column align-items-center py-5">
                       <div className="spinner-border text-primary mb-3" role="status"></div>

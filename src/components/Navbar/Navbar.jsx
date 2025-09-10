@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../assets/fos_logo.png';
 import './Navbar.css';
@@ -8,8 +8,8 @@ const Navbar = ({ hideNavbar, onLogout }) => {
 
   const navigate = useNavigate();
   const [employee, setEmployee] = useState({ name: '', id: '' });
-  const navbarCollapseRef = useRef(null);
   const [role, setRole] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const empData = JSON.parse(localStorage.getItem('employee'));
@@ -31,17 +31,16 @@ const Navbar = ({ hideNavbar, onLogout }) => {
   };
 
   const handleNavLinkClick = () => {
-    if (
-      navbarCollapseRef.current &&
-      navbarCollapseRef.current.classList.contains('show')
-    ) {
-      new window.bootstrap.Collapse(navbarCollapseRef.current).hide();
-    }
+    setMenuOpen(false);
+  };
+
+  const handleMenuToggle = () => {
+    setMenuOpen((prev) => !prev);
   };
 
   return (
     <nav
-      className="navbar navbar-expand-lg navbar-dark bg-dark px-3 fixed-top shadow"
+      className="navbar navbar-expand-lg navbar-dark px-3 fixed-top shadow navbar-gradient"
       style={{ zIndex: 1030 }}
     >
       <NavLink className="navbar-brand d-flex align-items-center" to="/dashboard/home" onClick={handleNavLinkClick}>
@@ -49,19 +48,23 @@ const Navbar = ({ hideNavbar, onLogout }) => {
         <span>FOS</span>
       </NavLink>
 
+      {/* Hamburger or Cross icon */}
       <button
         className="navbar-toggler"
         type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNavDropdown"
         aria-controls="navbarNavDropdown"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+        aria-expanded={menuOpen}
+        aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+        onClick={handleMenuToggle}
       >
-        <span className="navbar-toggler-icon"></span>
+        {menuOpen ? (
+          <span style={{ fontSize: '2rem', color: '#fff' }}>&#10005;</span>
+        ) : (
+          <span className="navbar-toggler-icon"></span>
+        )}
       </button>
 
-      <div className="collapse navbar-collapse" id="navbarNavDropdown" ref={navbarCollapseRef}>
+      <div className={`collapse navbar-collapse${menuOpen ? ' show' : ''}`} id="navbarNavDropdown">
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           {/* Owner: All links */}
           {role === 'owner' && (
@@ -87,11 +90,23 @@ const Navbar = ({ hideNavbar, onLogout }) => {
                   <li><NavLink className="dropdown-item" to="/dashboard/products/price" onClick={handleNavLinkClick}><i className="bi bi-currency-dollar me-1"></i>Update Price</NavLink></li>
                 </ul>
               </li>
-              {/* Sales & Collections */}
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
+
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                   <i className="bi bi-cash-coin me-1"></i>Sales & Collections
-                </NavLink>
+                </a>
+                <ul className="dropdown-menu">
+                  <li>
+                    <NavLink className="dropdown-item" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
+                      <i className="bi bi-cash-stack me-1"></i>Sales Data
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/dashboard/salescollectionhistory" onClick={handleNavLinkClick}>
+                      <i className="bi bi-clock-history me-1"></i>Sales History
+                    </NavLink>
+                  </li>
+                </ul>
               </li>
               {/* Customers */}
               <li className="nav-item dropdown">
@@ -130,16 +145,28 @@ const Navbar = ({ hideNavbar, onLogout }) => {
           {/* Manager: Main navs and subnavs */}
           {role === 'manager' && (
             <>
-              {/* Sales Data */}
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
+              {/* Sales Data with Sales History subnav */}
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                   <i className="bi bi-cash-coin me-1"></i>Sales Data
-                </NavLink>
+                </a>
+                <ul className="dropdown-menu">
+                  <li>
+                    <NavLink className="dropdown-item" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
+                      <i className="bi bi-cash-stack me-1"></i>Sales Data
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/dashboard/salescollectionhistory" onClick={handleNavLinkClick}>
+                      <i className="bi bi-clock-history me-1"></i>Sales History
+                    </NavLink>
+                  </li>
+                </ul>
               </li>
               {/* Manage Inventory */}
               <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                  <i className="bi bi-box"></i> Manage Inventory
+                  <i className="bi bi-box"></i> Inventory
                 </a>
                 <ul className="dropdown-menu">
                   <li><NavLink className="dropdown-item" to="/dashboard/inventory/view" onClick={handleNavLinkClick}><i className="bi bi-box-seam me-1"></i>View Inventory</NavLink></li>
@@ -149,7 +176,7 @@ const Navbar = ({ hideNavbar, onLogout }) => {
               {/* Manage Product */}
               <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                  <i className="bi bi-bag"></i> Manage Product
+                  <i className="bi bi-bag"></i> Product
                 </a>
                 <ul className="dropdown-menu">
                   <li><NavLink className="dropdown-item" to="/dashboard/products/view" onClick={handleNavLinkClick}><i className="bi bi-card-list me-1"></i>View Products</NavLink></li>
@@ -160,11 +187,11 @@ const Navbar = ({ hideNavbar, onLogout }) => {
               {/* Staff Management */}
               <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                  <i className="bi bi-person-badge"></i> Staff Management
+                  <i className="bi bi-person-badge"></i> Staff
                 </a>
                 <ul className="dropdown-menu">
                   <li><NavLink className="dropdown-item" to="/dashboard/staff/view" onClick={handleNavLinkClick}><i className="bi bi-person-lines-fill me-1"></i>View Staff</NavLink></li>
-                  <li><NavLink className="dropdown-item" to="/dashboard/staff/add" onClick={handleNavLinkClick}><i className="bi bi-person-plus me-1"></i>Add Staff</NavLink></li>
+                  <li><NavLink className="dropdown-item" to="/dashboard/staff/set-duty" onClick={handleNavLinkClick}><i className="bi bi-person-plus me-1"></i>Set Duty</NavLink></li>
                 </ul>
               </li>
               {/* Customers */}
@@ -201,7 +228,6 @@ const Navbar = ({ hideNavbar, onLogout }) => {
             </>
           )}
 
-          {/* Employee: Only Sales & Collections */}
           {role === 'employee' && (
             <li className="nav-item">
               <NavLink className="nav-link" to="/dashboard/salescollections" onClick={handleNavLinkClick}>
@@ -211,7 +237,7 @@ const Navbar = ({ hideNavbar, onLogout }) => {
           )}
         </ul>
 
-        {/* Right side: employee and logout, Home only for owner */}
+
         <div className="d-flex align-items-center text-white gap-3">
           <span>{employee.name} (ID: {employee.id})</span>
           {role === 'owner' && (
